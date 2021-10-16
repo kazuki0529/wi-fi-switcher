@@ -7,7 +7,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 
 COPY src /usr/local/src
 WORKDIR /usr/local/src
-
 RUN yarn
+
+COPY ./docker/cron.conf /var/spool/cron/crontabs/root
 
 ENTRYPOINT [ "busybox", "crond", "-l", "2", "-L", "/dev/stderr", "-f" ]

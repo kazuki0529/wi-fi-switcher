@@ -8,10 +8,11 @@ services:
     environment:
       - CYPRESS_USER_NAME
       - CYPRESS_PASSWORD
+      - TZ
     volumes:
-      - ./cron.conf:/var/spool/cron/crontabs/root
-      - ./videos:/usr/local/src/cypress/videos
-      - ./screenshots:/usr/local/src/cypress/screenshots
+      - ./data/videos:/usr/local/src/cypress/videos
+      - ./data/screenshots:/usr/local/src/cypress/screenshots
+      - ./data/schedule.csv:/usr/local/data/schedule.csv
     logging:
       driver: 'json-file'
       options:
