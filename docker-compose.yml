@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  wifi-switcher:
+    image: node:16-buster-slim
+    volumes:
+      - ./init.d:/docker-init.d
+      - ./src:/usr/local/src
+      - ./cron.conf:/var/spool/cron/crontabs/root
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: 10m
+    command: /bin/bash /docker-init.d/entorypoint.sh
+    restart: always
