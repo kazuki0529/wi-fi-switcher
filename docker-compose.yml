@@ -2,14 +2,18 @@ version: '3'
 
 services:
   wifi-switcher:
-    image: node:16-buster-slim
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile 
+    environment:
+      - CYPRESS_USER_NAME
+      - CYPRESS_PASSWORD
     volumes:
-      - ./init.d:/docker-init.d
-      - ./src:/usr/local/src
       - ./cron.conf:/var/spool/cron/crontabs/root
+      - ./videos:/usr/local/src/cypress/videos
+      - ./screenshots:/usr/local/src/cypress/screenshots
     logging:
       driver: 'json-file'
       options:
         max-size: 10m
-    command: /bin/bash /docker-init.d/entorypoint.sh
     restart: always
