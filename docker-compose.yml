@@ -1,10 +1,10 @@
 version: '3'
 
 services:
-  wifi-switcher:
+  switcher:
     build:
       context: .
-      dockerfile: ./docker/Dockerfile 
+      dockerfile: ./docker/switcher/Dockerfile 
     environment:
       - CYPRESS_USER_NAME
       - CYPRESS_PASSWORD
@@ -12,6 +12,22 @@ services:
     volumes:
       - ./data/videos:/usr/local/src/cypress/videos
       - ./data/screenshots:/usr/local/src/cypress/screenshots
+      - ./data/schedule.csv:/usr/local/data/schedule.csv
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: 10m
+    restart: always
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/web/Dockerfile 
+    environment:
+      - APPROVE_PASSWORD
+      - TZ
+    ports:
+      - 5000:8501
+    volumes:
       - ./data/schedule.csv:/usr/local/data/schedule.csv
     logging:
       driver: 'json-file'

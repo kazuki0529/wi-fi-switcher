@@ -9,6 +9,6 @@ COPY src /usr/local/src
 WORKDIR /usr/local/src
 RUN yarn
 
-COPY ./docker/cron.conf /var/spool/cron/crontabs/root
+COPY ./docker/switcher/cron.conf /var/spool/cron/crontabs/root
 
 ENTRYPOINT [ "busybox", "crond", "-l", "2", "-L", "/dev/stderr", "-f" ]
