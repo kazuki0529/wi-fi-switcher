@@ -35,9 +35,10 @@ declare -r schedule=$2
 
 cd $(dirname $0)
 
-while IFS=, read start end description; do
+while IFS=, read start end status; do
   # ヘッダ行判定
   [[ "${start}" == "start" ]] && continue
+  [[ "${status}" != "Approve" ]] && continue
 
   is_within_period "${now}" "${start}" "${end}" \
     && (yarn cypress run -s ./cypress/integration/PR-500KI-wifi-on.ts || true) \
