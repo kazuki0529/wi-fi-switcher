@@ -23,7 +23,7 @@ services:
       context: .
       dockerfile: ./docker/web/Dockerfile 
     environment:
-      - APPROVE_PASSWORD
+      - APPROVE_CODE
       - TZ
     ports:
       - 5000:8501
