@@ -38,7 +38,7 @@ end = datetime.combine(
 )
 
 # TODO: 23時とかにゲームやらないようにチェックする
-if (end - start).total_seconds() <= 2 * 60 * 60 + 10 * 60:  # 2時間 + 10分（バッファ）
+if (end - start).total_seconds() <= 2 * 60 * 60 + 20 * 60:  # 2時間 + 20分（バッファ）
     if st.button('申請'):
         df = df.append({
             'start': start,
