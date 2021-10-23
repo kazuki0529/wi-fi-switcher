@@ -63,7 +63,7 @@ st.table(df.query('status != "Approve"'))
 
 st.subheader('承認', anchor='approve')
 
-num = st.number_input(label='対象番号', value=0, min_value=0, max_value=(len(df) - 1))
+num = st.number_input(label='対象番号', value=(len(df) - 1), min_value=0, max_value=(len(df) - 1))
 password = st.text_input(label='承認コード', type='password')
 col1, col2 = st.columns(2)
 
