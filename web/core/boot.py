@@ -18,13 +18,12 @@ st.header('新規申請')
 
 
 # 今日どれくらいやる予定か表示する
-today = datetime(*datetime.now().timetuple()[:3])
+now = datetime.now() + timedelta(hours=9) # UTC → JSTに無理やり変換
+today = datetime(*now.timetuple()[:3])
 today_request = df.query(f'start >= "{today}" and start < "{today + timedelta(days=1)}"')
 if len(today_request) > 0:
     play_sec = today_request.apply(lambda x: (x['end'] - x['start']).total_seconds(), axis=1).sum()
     st.info(f'本日は {time(hour=int(play_sec / 60 / 60), minute=int(play_sec / 60 % 60), second=int(play_sec % 60))} 分のゲームプレイ申請をしています。')
-
-now = datetime.now()
 start = datetime.combine(
     st.date_input(label='開始日', value=now, min_value=now),
     st.time_input(label='開始時間', value=now)
