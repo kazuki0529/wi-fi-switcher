@@ -12,9 +12,9 @@ df['end'] = pd.to_datetime(df['end'], format='%Y-%m-%d %H:%M:%S')
 
 
 # ページ内のタイトル
-st.set_page_config(page_title='ゲームプレイ申請', page_icon=':video_game:')
+#st.set_page_config(page_title='ゲームプレイ申請', page_icon=':video_game:')
 st.title('ゲームプレイ申請')
-st.header('新規申請', anchor="new_request")
+st.header('新規申請')
 
 
 # 今日どれくらいやる予定か表示する
@@ -25,11 +25,10 @@ if len(today_request) > 0:
     st.info(f'本日は {time(hour=int(play_sec / 60 / 60), minute=int(play_sec / 60 % 60), second=int(play_sec % 60))} 分のゲームプレイ申請をしています。')
 
 now = datetime.now()
-with st.container():
-    start = datetime.combine(
-        st.date_input(label='開始日', value=now, min_value=now),
-        st.time_input(label='開始時間', value=now)
-    )
+start = datetime.combine(
+    st.date_input(label='開始日', value=now, min_value=now),
+    st.time_input(label='開始時間', value=now)
+)
 
 end = start
 end = datetime.combine(
@@ -51,26 +50,22 @@ if (end - start).total_seconds() <= 2 * 60 * 60 + 20 * 60:  # 2時間 + 20分（
 else:
     st.error('一度にプレイできるゲーム時間は2時間です。')
 
-with st.expander("承認済みの申請を表示する"):
-    st.dataframe(df.query('status == "Approve"').sort_values('start', ascending=False))
+st.dataframe(df.query('status == "Approve"').sort_values('start', ascending=False))
 
 
-st.header('申請承認', anchor="request_list")
-st.subheader('未承認一覧', anchor='approve')
+st.header('申請承認')
+st.subheader('未承認一覧')
 
 # 未承認の一覧
 st.table(df.query('status != "Approve"'))
 
-st.subheader('承認', anchor='approve')
+st.subheader('承認')
 
 num = st.number_input(label='対象番号', value=(len(df) - 1), min_value=0, max_value=(len(df) - 1))
 password = st.text_input(label='承認コード', type='password')
-col1, col2 = st.columns(2)
 
-with col1:
-    approved = st.button('承認')
-with col2:
-    rejected = st.button('却下')
+approved = st.button('承認')
+rejected = st.button('却下')
 
 try:
     if approved:
@@ -79,6 +74,7 @@ try:
             df.at[num, 'status'] = 'Approve'
             df.to_csv(file, index=False)
             st.success('承認しました。')
+            logging.info(f'申請番号={num}を承認しました。')
         else:
             raise RuntimeError('承認コードが不適切です。この操作は記録されました。')
 
