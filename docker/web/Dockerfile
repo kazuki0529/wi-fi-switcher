@@ -11,7 +11,7 @@ RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requ
     && rm -rf /tmp/pip-tmp
 
 COPY web /usr/local/src
-WORKDIR /usr/local/src/core
+WORKDIR /usr/local/src/
 
-ENTRYPOINT ["streamlit"]
-CMD ["run", "boot.py"]
+ENTRYPOINT ["python"]
+CMD ["app.py"]

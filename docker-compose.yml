@@ -12,7 +12,7 @@ services:
     volumes:
       - ./data/videos:/usr/local/src/cypress/videos
       - ./data/screenshots:/usr/local/src/cypress/screenshots
-      - ./data/schedule.csv:/usr/local/data/schedule.csv
+      - ./data:/usr/local/data
     logging:
       driver: 'json-file'
       options:
@@ -26,9 +26,9 @@ services:
       - APPROVE_CODE
       - TZ
     ports:
-      - 5000:8501
+      - 5000:5000
     volumes:
-      - ./data/schedule.csv:/usr/local/data/schedule.csv
+      - ./data:/usr/local/data
     logging:
       driver: 'json-file'
       options:
