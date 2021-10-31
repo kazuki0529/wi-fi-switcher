@@ -89,7 +89,7 @@
       </v-main>
 
       <!-- 新規申請 -->
-      <v-btn right bottom fixed fab color="info" @click="requestForm.dialog = !requestForm.dialog">
+      <v-btn right bottom fixed fab color="info" @click="showRequestForm()">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
       <v-dialog v-model="requestForm.dialog" persistent max-width="600px">
@@ -100,19 +100,20 @@
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12">
-                  <v-menu v-model="requestForm.date.picker" :close-on-content-click="false"
+                <!-- 開始日時 -->
+                <v-col cols="12" sm="6">
+                  <v-menu v-model="requestForm.startDate.picker" :close-on-content-click="false"
                     transition="scale-transition" offset-y max-width="290px" min-width="auto">
                     <template v-slot:activator="{ on, attrs }">
-                      <v-text-field v-model="requestForm.date.value" label="日付" persistent-hint
+                      <v-text-field v-model="requestForm.startDate.value" label="開始日付" persistent-hint
                         prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
                       </v-text-field>
                     </template>
-                    <v-date-picker v-model="requestForm.date.value" no-title @input="requestForm.date.picker = false">
+                    <v-date-picker v-model="requestForm.startDate.value" no-title
+                      @input="requestForm.startDate.picker = false">
                     </v-date-picker>
                   </v-menu>
                 </v-col>
-
                 <v-col cols="12" sm="6">
                   <v-menu ref="menu" v-model="requestForm.startTime.picker" :close-on-content-click="false"
                     :nudge-right="40" transition="scale-transition" offset-y max-width="290px" min-width="290px">
@@ -122,12 +123,25 @@
                       </v-text-field>
                     </template>
                     <v-time-picker v-if="requestForm.startTime.picker" v-model="requestForm.startTime.value" full-width
-                      @click:minute="$refs.menu.save(requestForm.startTime.value)"
-                      @input="requestForm.endTime.value = moment(requestForm.startTime.value, 'HH:mm').add(2, 'hours').format('HH:mm')">
+                      @click:minute="$refs.menu.save(requestForm.startTime.value)">
                     </v-time-picker>
                   </v-menu>
                 </v-col>
 
+                <!-- 終了日時 -->
+                <v-col cols="12" sm="6">
+                  <v-menu v-model="requestForm.endDate.picker" :close-on-content-click="false"
+                    transition="scale-transition" offset-y max-width="290px" min-width="auto">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field v-model="requestForm.endDate.value" label="終了日付" persistent-hint
+                        prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
+                      </v-text-field>
+                    </template>
+                    <v-date-picker v-model="requestForm.endDate.value" no-title
+                      @input="requestForm.endDate.picker = false">
+                    </v-date-picker>
+                  </v-menu>
+                </v-col>
                 <v-col cols="12" sm="6">
                   <v-menu ref="menu" v-model="requestForm.endTime.picker" :close-on-content-click="false"
                     :nudge-right="40" transition="scale-transition" offset-y max-width="290px" min-width="290px">
