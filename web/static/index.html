@@ -47,83 +47,9 @@
                   <v-divider class="mx-4" inset vertical></v-divider>
 
                   <v-spacer></v-spacer>
-                  <v-switch v-model="gamePlay.filter" inset label="未承認のみ表示"></v-switch>
 
                   <v-divider class="mx-4" inset vertical></v-divider>
-                  <!-- 新規申請 -->
-                  <v-dialog v-model="requestForm.dialog" persistent max-width="600px">
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                        新規申請
-                      </v-btn>
-                    </template>
-
-                    <v-card>
-                      <v-card-title>
-                        <span class="text-h5">申請</span>
-                      </v-card-title>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col cols="12">
-                              <v-menu v-model="requestForm.date.picker" :close-on-content-click="false"
-                                transition="scale-transition" offset-y max-width="290px" min-width="auto">
-                                <template v-slot:activator="{ on, attrs }">
-                                  <v-text-field v-model="requestForm.date.value" label="日付" persistent-hint
-                                    prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
-                                  </v-text-field>
-                                </template>
-                                <v-date-picker v-model="requestForm.date.value" no-title
-                                  @input="requestForm.date.picker = false">
-                                </v-date-picker>
-                              </v-menu>
-                            </v-col>
-
-                            <v-col cols="12" sm="6">
-                              <v-menu ref="menu" v-model="requestForm.startTime.picker" :close-on-content-click="false"
-                                :nudge-right="40" transition="scale-transition" offset-y max-width="290px"
-                                min-width="290px">
-                                <template v-slot:activator="{ on, attrs }">
-                                  <v-text-field v-model="requestForm.startTime.value" label="開始時間"
-                                    prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on">
-                                  </v-text-field>
-                                </template>
-                                <v-time-picker v-if="requestForm.startTime.picker" v-model="requestForm.startTime.value"
-                                  full-width @click:minute="$refs.menu.save(requestForm.startTime.value)"
-                                  @input="requestForm.endTime.value = moment(requestForm.startTime.value, 'HH:mm').add(2, 'hours').format('HH:mm')">
-                                </v-time-picker>
-                              </v-menu>
-                            </v-col>
-
-                            <v-col cols="12" sm="6">
-                              <v-menu ref="menu" v-model="requestForm.endTime.picker" :close-on-content-click="false"
-                                :nudge-right="40" transition="scale-transition" offset-y max-width="290px"
-                                min-width="290px">
-                                <template v-slot:activator="{ on, attrs }">
-                                  <v-text-field v-model="requestForm.endTime.value" label="終了時間"
-                                    prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on">
-                                  </v-text-field>
-                                </template>
-                                <v-time-picker v-if="requestForm.endTime.picker" v-model="requestForm.endTime.value"
-                                  full-width @click:minute="$refs.menu.save(requestForm.endTime.value)">
-                                </v-time-picker>
-                              </v-menu>
-                            </v-col>
-
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn outlined @click="requestForm.dialog = false">
-                          閉じる
-                        </v-btn>
-                        <v-btn color="primary" @click="addRequest({...requestForm})">
-                          申請
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
+                  <v-switch v-model="gamePlay.filter" inset label="未承認のみ表示"></v-switch>
                 </v-toolbar>
               </template>
 
@@ -161,6 +87,75 @@
           </v-card>
         </v-container>
       </v-main>
+
+      <!-- 新規申請 -->
+      <v-btn right bottom fixed fab color="info" @click="requestForm.dialog = !requestForm.dialog">
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+      <v-dialog v-model="requestForm.dialog" persistent max-width="600px">
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">申請</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-menu v-model="requestForm.date.picker" :close-on-content-click="false"
+                    transition="scale-transition" offset-y max-width="290px" min-width="auto">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field v-model="requestForm.date.value" label="日付" persistent-hint
+                        prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
+                      </v-text-field>
+                    </template>
+                    <v-date-picker v-model="requestForm.date.value" no-title @input="requestForm.date.picker = false">
+                    </v-date-picker>
+                  </v-menu>
+                </v-col>
+
+                <v-col cols="12" sm="6">
+                  <v-menu ref="menu" v-model="requestForm.startTime.picker" :close-on-content-click="false"
+                    :nudge-right="40" transition="scale-transition" offset-y max-width="290px" min-width="290px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field v-model="requestForm.startTime.value" label="開始時間"
+                        prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on">
+                      </v-text-field>
+                    </template>
+                    <v-time-picker v-if="requestForm.startTime.picker" v-model="requestForm.startTime.value" full-width
+                      @click:minute="$refs.menu.save(requestForm.startTime.value)"
+                      @input="requestForm.endTime.value = moment(requestForm.startTime.value, 'HH:mm').add(2, 'hours').format('HH:mm')">
+                    </v-time-picker>
+                  </v-menu>
+                </v-col>
+
+                <v-col cols="12" sm="6">
+                  <v-menu ref="menu" v-model="requestForm.endTime.picker" :close-on-content-click="false"
+                    :nudge-right="40" transition="scale-transition" offset-y max-width="290px" min-width="290px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field v-model="requestForm.endTime.value" label="終了時間"
+                        prepend-icon="mdi-clock-time-four-outline" readonly v-bind="attrs" v-on="on">
+                      </v-text-field>
+                    </template>
+                    <v-time-picker v-if="requestForm.endTime.picker" v-model="requestForm.endTime.value" full-width
+                      @click:minute="$refs.menu.save(requestForm.endTime.value)">
+                    </v-time-picker>
+                  </v-menu>
+                </v-col>
+
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn outlined @click="requestForm.dialog = false">
+              閉じる
+            </v-btn>
+            <v-btn color="primary" @click="addRequest({...requestForm})">
+              申請
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
       <v-snackbar v-model="success.show" timeout="3000" color="success">
         {{ success.message }}
