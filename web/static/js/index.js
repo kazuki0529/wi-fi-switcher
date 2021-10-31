@@ -14,6 +14,7 @@ const store = {
       show: false,
       message: '',
     },
+    approveCode: undefined,
     today: true,
     gamePlay: {
       loading: true,
@@ -30,17 +31,21 @@ const store = {
     },
     requestForm: {
       dialog: false,
-      date: {
+      startDate: {
         picker: false,
         value: moment().format("YYYY-MM-DD"),
       } ,
       startTime: {
         picker: false,
-        value: moment().format("hh:mm"),
+        value: moment().format("HH:mm"),
       },
+      endDate: {
+        picker: false,
+        value: moment().add(2, 'hours').format("YYYY-MM-DD"),
+      } ,
       endTime: {
         picker: false,
-        value: moment().add(2, 'hours').format("hh:mm"),
+        value: moment().add(2, 'hours').format("HH:mm"),
       },
     }
   }
@@ -52,6 +57,7 @@ new Vue({
   vuetify: new Vuetify(),
   created: function () {
     this.getRequests();
+    this.getApproveCode();
   },
   computed: {
     approveWaitingList() {
@@ -62,7 +68,14 @@ new Vue({
       return this.gamePlay.data
         .filter(e => today.format('YYYY-MM-DD') === e.start.format('YYYY-MM-DD') && e.status !== 'Rejected')
         .reduce((prev, curr) => prev + curr.end.diff(curr.start, 'hours'), 0)
-    }
+    },
+    calcEndDateTime() {
+      this.requestForm.startDate.picker = false
+
+      const end = moment(`${item.startDate.value} ${item.startTime.value}`).add(2, 'hours');
+      this.requestForm.endDate.value = end.format('YYYY-MM-DD')
+      this.requestForm.endTime.value = end.format('HH:mm')
+    },
   },
   methods: {
     getStatusColor(item) {
@@ -89,6 +102,17 @@ new Vue({
         () => this.gamePlay.loading = false
       );
     },
+    showRequestForm() {
+      const now = moment();
+      const end = now.clone().add(2, 'hours');
+
+      this.requestForm.startDate.value = now.format('YYYY-MM-DD')
+      this.requestForm.startTime.value = now.format('HH:mm')
+      this.requestForm.endDate.value = end.format('YYYY-MM-DD')
+      this.requestForm.endTime.value = end.format('HH:mm')
+
+      this.requestForm.dialog = !this.requestForm.dialog;
+    },
     saveRequests() {
       this.gamePlay.saving = true;
       axios.post(
@@ -114,8 +138,8 @@ new Vue({
     },
     addRequest(item) {
       this.gamePlay.data.push({
-        start: moment(`${item.date.value} ${item.startTime.value}`),
-        end: moment(`${item.date.value} ${item.endTime.value}`),
+        start: moment(`${item.startDate.value} ${item.startTime.value}`),
+        end: moment(`${item.endDate.value} ${item.endTime.value}`),
         status: 'Request',
         color: STATUS_COLOR['Request']
       });
@@ -123,9 +147,26 @@ new Vue({
       this.saveRequests();
       this.requestForm.dialog = false
     },
+    getApproveCode() {
+      axios.get(
+        '/api/approve/code',
+      ).then(
+        (response) => this.approveCode = response.data
+      ).catch(
+        (error) => {
+          this.failure.show = true;
+          this.failure.message = '認証コードの取得に失敗しました。';
+        }
+      );
+    },
     approve(item) {
-      item.status = 'Approve';
-      this.saveRequests();
+      if (this.approveCode === window.prompt("承認用コードを入力してください", "")) {
+        item.status = 'Approve';
+        this.saveRequests();
+      } else {
+        this.failure.show = true;
+        this.failure.message = '認証用コードが一致しませんでした。この操作は記録されます。';
+      }
     },
     reject(item) {
       item.status = 'Rejected';
