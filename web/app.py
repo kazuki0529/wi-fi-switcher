@@ -1,6 +1,6 @@
 import csv
-from os import write
-from flask import Blueprint, request, abort, jsonify, Flask
+from os import environ
+from flask import request, jsonify, Flask
 app = Flask(__name__, static_folder='./static', static_url_path='')
 
 
@@ -25,6 +25,12 @@ def save_requests():
         writer.writerow(['start', 'end', 'status'])
         writer.writerows([list(item.values()) for item in json])
         return "", 200
+
+
+@app.route('/api/approve/code', methods=['GET'])
+def get_approve_code():
+    print(f'APPROVE_CODE = {environ["APPROVE_CODE"]}')
+    return environ['APPROVE_CODE'], 200
 
 
 app.run(host='0.0.0.0', port=5000, debug=True)

@@ -14,6 +14,7 @@ const store = {
       show: false,
       message: '',
     },
+    approveCode: undefined,
     today: true,
     gamePlay: {
       loading: true,
@@ -52,6 +53,7 @@ new Vue({
   vuetify: new Vuetify(),
   created: function () {
     this.getRequests();
+    this.getApproveCode();
   },
   computed: {
     approveWaitingList() {
@@ -123,9 +125,26 @@ new Vue({
       this.saveRequests();
       this.requestForm.dialog = false
     },
+    getApproveCode() {
+      axios.get(
+        '/api/approve/code',
+      ).then(
+        (response) => this.approveCode = response.data
+      ).catch(
+        (error) => {
+          this.failure.show = true;
+          this.failure.message = '認証コードの取得に失敗しました。';
+        }
+      );
+    },
     approve(item) {
-      item.status = 'Approve';
-      this.saveRequests();
+      if (this.approveCode === window.prompt("承認用コードを入力してください", "")) {
+        item.status = 'Approve';
+        this.saveRequests();
+      } else {
+        this.failure.show = true;
+        this.failure.message = '認証用コードが一致しませんでした。この操作は記録されます。';
+      }
     },
     reject(item) {
       item.status = 'Rejected';
