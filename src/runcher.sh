@@ -32,6 +32,10 @@ is_within_period() {
 
 declare -r now=$1
 declare -r schedule=$2
+declare -r status_file='/tmp/wifi-switcher'
+
+touch "${status_file}" \
+  && declare -r latest_status=$(cat "${status_file}")
 
 cd $(dirname $0)
 
@@ -40,9 +44,16 @@ while IFS=, read start end status; do
   [[ "${start}" == "start" ]] && continue
   [[ "${status}" != "Approve" ]] && continue
 
-  is_within_period "${now}" "${start}" "${end}" \
-    && (yarn cypress run -s ./cypress/integration/PR-500KI-wifi-on.ts || true) \
-    &&  exit 0
+  # 範囲外なら次の行
+  is_within_period "${now}" "${start}" "${end}" || continue
+
+  [[ "${latest_status}" != 'ON' ]] \
+    && (yarn cypress run -s "./cypress/integration/${TARGET_ROUTER}-wifi-on.ts" || true) \
+    && echo -n 'ON' > "${status_file}" \
+    && exit 0
 done < "${schedule}"
 
-yarn cypress run -s ./cypress/integration/PR-500KI-wifi-off.ts
+[[ "${latest_status}" != 'OFF' ]] \
+  && (yarn cypress run -s "./cypress/integration/${TARGET_ROUTER}-wifi-off.ts" || true) \
+  && echo -n 'OFF' > "${status_file}"
+
