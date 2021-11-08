@@ -49,8 +49,9 @@ while IFS=, read start end status; do
 
   [[ "${latest_status}" != 'ON' ]] \
     && (yarn cypress run -s "./cypress/integration/${TARGET_ROUTER}-wifi-on.ts" || true) \
-    && echo -n 'ON' > "${status_file}" \
-    && exit 0
+    && echo -n 'ON' > "${status_file}"
+
+  exit 0
 done < "${schedule}"
 
 [[ "${latest_status}" != 'OFF' ]] \
