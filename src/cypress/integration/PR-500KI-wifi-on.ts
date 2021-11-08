@@ -9,7 +9,7 @@ it('Wi-Fi On', () => {
   })
   cy.get('#SSID2_EDIT_BUTTON').click()
 
-  cy.get('#MAC_FILTER_FLAG').should('be.checked')
+  // cy.get('#MAC_FILTER_FLAG').should('be.checked')
   cy.get('#MAC_FILTER_FLAG').uncheck()
   cy.get('#SETTING_BUTTON').click()
 
