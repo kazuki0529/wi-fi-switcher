@@ -1,5 +1,9 @@
 {
   "name": "wi-fi-switcher",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kazuki0529/wi-fi-switcher.git"
+  },
   "scripts": {
     "build": "npx projen build",
     "clobber": "npx projen clobber",
@@ -41,6 +45,8 @@
   },
   "dependencies": {
     "@aws-cdk/assert": "^1.95.2",
+    "@aws-cdk/aws-dynamodb": "^1.95.2",
+    "@aws-cdk/aws-iam": "^1.95.2",
     "@aws-cdk/core": "^1.95.2"
   },
   "bundledDependencies": [],

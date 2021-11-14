@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot 1`] = `
+Object {
+  "Resources": Object {
+    "data7E2128CA": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "AttributeDefinitions": Array [
+          Object {
+            "AttributeName": "p_key",
+            "AttributeType": "S",
+          },
+          Object {
+            "AttributeName": "s_key",
+            "AttributeType": "S",
+          },
+          Object {
+            "AttributeName": "gsi1_p_key",
+            "AttributeType": "S",
+          },
+          Object {
+            "AttributeName": "gsi1_s_key",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "GlobalSecondaryIndexes": Array [
+          Object {
+            "IndexName": "GSI-1",
+            "KeySchema": Array [
+              Object {
+                "AttributeName": "gsi1_p_key",
+                "KeyType": "HASH",
+              },
+              Object {
+                "AttributeName": "gsi1_s_key",
+                "KeyType": "RANGE",
+              },
+            ],
+            "Projection": Object {
+              "ProjectionType": "ALL",
+            },
+          },
+        ],
+        "KeySchema": Array [
+          Object {
+            "AttributeName": "p_key",
+            "KeyType": "HASH",
+          },
+          Object {
+            "AttributeName": "s_key",
+            "KeyType": "RANGE",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::Table",
+      "UpdateReplacePolicy": "Delete",
+    },
+  },
+}
+`;

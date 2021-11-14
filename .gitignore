@@ -47,10 +47,7 @@ junit.xml
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
-!/.github/workflows/upgrade.yml
-
-# dockerの環境変数ファイル
+yarn-error.log
 .env
-
-# データディレクトリ
 data/
+!/.github/workflows/upgrade.yml
