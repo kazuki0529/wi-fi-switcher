@@ -84,13 +84,15 @@ new Vue({
     getRequests() {
       this.gamePlay.loading = true;
       axios.get(
-        '/api/requests',
+        '/api/v1/requests',
       ).then(
         (response) => this.gamePlay.data = response.data.map(e => ({
           ...e,
           ...{
             start: moment(e.start),
             end: moment(e.end),
+            createdAt: moment(e.createdAt),
+            updatedAt: moment(e.updatedAt),
           }
         }))
       ).catch(
@@ -113,15 +115,14 @@ new Vue({
 
       this.requestForm.dialog = !this.requestForm.dialog;
     },
-    saveRequests() {
-      this.gamePlay.saving = true;
+    addRequest(item) {
       axios.post(
-        '/api/requests',
-        this.gamePlay.data.map((e) => ({
-          start: e.start.toISOString(),
-          end: e.end.toISOString(),
-          status: e.status
-        }))
+        '/api/v1/requests',
+        {
+          start: moment(`${item.startDate.value} ${item.startTime.value}`).toISOString(),
+          end: moment(`${item.endDate.value} ${item.endTime.value}`).toISOString(),
+          status: 'Request',
+        }
       ).then(
         () => {
           this.success.show = true;
@@ -133,18 +134,15 @@ new Vue({
           this.failure.message = '保存に失敗しました。';
         }
       ).finally(
-        () => this.gamePlay.saving = false
+        () => {
+          this.gamePlay.saving = false
+          // 一覧更新
+          this.getRequests()
+        }
       );
-    },
-    addRequest(item) {
-      this.gamePlay.data.push({
-        start: moment(`${item.startDate.value} ${item.startTime.value}`),
-        end: moment(`${item.endDate.value} ${item.endTime.value}`),
-        status: 'Request',
-        color: STATUS_COLOR['Request']
-      });
 
-      this.saveRequests();
+      // 一覧更新
+      this.getRequests()
       this.requestForm.dialog = false
     },
     getApproveCode() {
@@ -161,16 +159,56 @@ new Vue({
     },
     approve(item) {
       if (this.approveCode === window.prompt("承認用コードを入力してください", "")) {
-        item.status = 'Approve';
-        this.saveRequests();
+        axios.put(
+          `/api/v1/requests/${item['id']}`,
+          {
+            status: 'Approve',
+          }
+        ).then(
+          () => {
+            this.success.show = true;
+            this.success.message = '保存が成功しました。';
+          }
+        ).catch(
+          (error) => {
+            this.failure.show = true;
+            this.failure.message = '保存に失敗しました。';
+          }
+        ).finally(
+          () => {
+            this.gamePlay.saving = false
+            // 一覧更新
+            this.getRequests()
+          }
+        );
       } else {
         this.failure.show = true;
         this.failure.message = '認証用コードが一致しませんでした。この操作は記録されます。';
       }
     },
     reject(item) {
-      item.status = 'Rejected';
-      this.saveRequests();
+      axios.put(
+        `/api/v1/requests/${item['id']}`,
+        {
+          status: 'Rejected',
+        }
+      ).then(
+        () => {
+          this.success.show = true;
+          this.success.message = '保存が成功しました。';
+        }
+      ).catch(
+        (error) => {
+          this.failure.show = true;
+          this.failure.message = '保存に失敗しました。';
+        }
+      ).finally(
+        () => {
+          this.gamePlay.saving = false
+          // 一覧更新
+          this.getRequests()
+        }
+      );
     }
   }
 });
