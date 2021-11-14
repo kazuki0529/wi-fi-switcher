@@ -1,4 +1,4 @@
-./src/node_modules
-./src/cypress/screenshots
-./src/cypress/videos
-./src/cypress.env.json
+./switcher/node_modules
+./switcher/cypress/screenshots
+./switcher/cypress/videos
+./switcher/cypress.env.json
