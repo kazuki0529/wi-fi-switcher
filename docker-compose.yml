@@ -6,10 +6,11 @@ services:
       context: .
       dockerfile: ./docker/switcher/Dockerfile 
     environment:
-      - CYPRESS_USER_NAME
-      - CYPRESS_PASSWORD
-      - TZ
-      - TARGET_ROUTER
+      CYPRESS_USER_NAME: ${CYPRESS_USER_NAME:?error}
+      CYPRESS_PASSWORD: ${CYPRESS_PASSWORD:?error}
+      TARGET_ROUTER: ${TARGET_ROUTER?error}
+      API_END_POINT: ${API_END_POINT:-http://web:5000}
+      TZ: ${TZ:-Asia/Tokyo}
     volumes:
       - ./data/videos:/usr/local/src/cypress/videos
       - ./data/screenshots:/usr/local/src/cypress/screenshots
@@ -24,8 +25,11 @@ services:
       context: .
       dockerfile: ./docker/web/Dockerfile 
     environment:
-      - APPROVE_CODE
-      - TZ
+      APPROVE_CODE: ${APPROVE_CODE?error}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID?error}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY?error}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION?error}
+      TZ: ${TZ:-Asia/Tokyo}
     ports:
       - 5000:5000
     volumes:
