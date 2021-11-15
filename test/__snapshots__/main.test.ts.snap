@@ -8,19 +8,19 @@ Object {
       "Properties": Object {
         "AttributeDefinitions": Array [
           Object {
-            "AttributeName": "p_key",
+            "AttributeName": "_p_key",
             "AttributeType": "S",
           },
           Object {
-            "AttributeName": "s_key",
+            "AttributeName": "_s_key",
             "AttributeType": "S",
           },
           Object {
-            "AttributeName": "gsi1_p_key",
+            "AttributeName": "_gsi1_p_key",
             "AttributeType": "S",
           },
           Object {
-            "AttributeName": "gsi1_s_key",
+            "AttributeName": "_gsi1_s_key",
             "AttributeType": "S",
           },
         ],
@@ -30,11 +30,11 @@ Object {
             "IndexName": "GSI-1",
             "KeySchema": Array [
               Object {
-                "AttributeName": "gsi1_p_key",
+                "AttributeName": "_gsi1_p_key",
                 "KeyType": "HASH",
               },
               Object {
-                "AttributeName": "gsi1_s_key",
+                "AttributeName": "_gsi1_s_key",
                 "KeyType": "RANGE",
               },
             ],
@@ -45,11 +45,11 @@ Object {
         ],
         "KeySchema": Array [
           Object {
-            "AttributeName": "p_key",
+            "AttributeName": "_p_key",
             "KeyType": "HASH",
           },
           Object {
-            "AttributeName": "s_key",
+            "AttributeName": "_s_key",
             "KeyType": "RANGE",
           },
         ],
