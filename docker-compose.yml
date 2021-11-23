@@ -30,6 +30,7 @@ services:
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY?error}
       AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION?error}
       TZ: ${TZ:-Asia/Tokyo}
+      TABLE_NAME: ${TABLE_NAME?error}
     ports:
       - 5000:5000
     volumes:
