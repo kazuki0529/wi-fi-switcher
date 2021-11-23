@@ -1,10 +1,15 @@
 import * as dynamo from '@aws-cdk/aws-dynamodb';
 import { Construct, RemovalPolicy, Stack, StackProps } from '@aws-cdk/core';
 
+export type StackStage = 'staging' | 'prod';
+
 export class WiFiSwitcherStack extends Stack {
   public readonly table: dynamo.Table;
 
-  constructor(scope: Construct, id: string, props: StackProps = {}) {
+  constructor(
+    scope: Construct, id: string,
+    props?: StackProps,
+  ) {
     super(scope, id, props);
 
     // データ格納領域作成
