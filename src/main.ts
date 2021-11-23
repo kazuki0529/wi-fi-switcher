@@ -1,5 +1,5 @@
 import { App } from '@aws-cdk/core';
-import { WiFiSwitcherPipelineStack } from './wi-fi-switcher-pipeline-stack';
+import { WiFiSwitcherStack } from './wi-fi-switcher-stack';
 
 
 // for development, use account/region from cdk cli
@@ -10,6 +10,6 @@ const devEnv = {
 
 const app = new App();
 
-new WiFiSwitcherPipelineStack(app, 'wi-fi-switcher-pipeline-stack', { env: devEnv });
+new WiFiSwitcherStack(app, 'wi-fi-switcher-stack', { env: devEnv });
 
 app.synth();
