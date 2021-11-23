@@ -6,16 +6,8 @@ const project = new AwsCdkTypeScriptApp({
   repository: 'https://github.com/kazuki0529/wi-fi-switcher.git',
   cdkDependencies: [
     '@aws-cdk/aws-dynamodb',
-    '@aws-cdk/pipelines',
-    '@aws-cdk/aws-codecommit',
-    '@aws-cdk/aws-codebuild',
-    '@aws-cdk/aws-codepipeline',
-    '@aws-cdk/aws-codepipeline-actions',
     '@aws-cdk/aws-iam',
   ],
-  context: {
-    '@aws-cdk/core:newStyleStackSynthesis': true,
-  },
   // deps: [],                    /* Runtime dependencies of this module. */
   // description: undefined,      /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],                 /* Build dependencies for this module. */
