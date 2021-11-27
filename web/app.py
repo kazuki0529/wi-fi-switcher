@@ -118,7 +118,7 @@ def get_approve_list():
         )
         items.extend(res['Items'])
 
-    response = make_response('\n'.join([f'{row["start"]},{row["end"]},{row["status"]}' for row in items]))
+    response = make_response('\n'.join([f'{row["start"]},{row["end"]},{row["status"]}' for row in items]) + '\n')
     response.headers['Content-Type'] = 'text/csv'
     response.headers['Content-Disposition'] = 'attachment; filename=approve-now.csv'
     return response, 200
