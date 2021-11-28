@@ -26,6 +26,9 @@ declare -r schedule=$(mktemp)
 wget -O "${schedule}" "${API_END_POINT}/api/v1/requests/approve/now"
 
 while IFS=, read start end status; do
+  [[ "${start}" == "start" ]] && continue     # ヘッダ行判定
+  [[ "${status}" != "Approve" ]] && continue  # 承認済みデータ判定
+
   [[ "${latest_status}" != 'ON' ]] \
     && (yarn cypress run -s "./cypress/integration/${TARGET_ROUTER}-wifi-on.ts" || true) \
     && echo -n 'ON' > "${status_file}"
