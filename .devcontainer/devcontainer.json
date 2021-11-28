@@ -58,7 +58,8 @@
     "redhat.vscode-yaml",
     "dbaeumer.vscode-eslint",
     "amazonwebservices.aws-toolkit-vscode",
-    "github.vscode-pull-request-github"
+    "github.vscode-pull-request-github",
+    "42crunch.vscode-openapi"
   ],
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
