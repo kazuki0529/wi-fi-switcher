@@ -1,0 +1,132 @@
+---
+openapi: 3.0.1
+info:
+  title: ゲーム申請API
+  version: 1.0.0
+
+paths:
+  /requests:
+    get:
+      summary: 申請の一覧取得
+      responses:
+        200:
+          description: 正常終了
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#/components/schemas/Request'
+    post:
+      summary: 申請の新規作成
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        200:
+          description: 正常終了
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Request'
+  /requests/{requestId}:
+    put:
+      summary: 申請の更新
+      parameters:
+        - name: requestId
+          in: path
+          description: 申請ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutRequest'
+      responses:
+        '200':
+          description: 正常終了
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Request'
+  /requests/approve/now:
+    get:
+      summary: 現在時間の承認済み申請一覧
+      responses:
+        '200':
+          description: 正常終了
+          content:
+            text/csv: 
+              schema: 
+                type: string
+
+components:
+  schemas:
+    PostRequest:
+      type: object
+      required:
+        - start
+        - end
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: 開始日時
+        end:
+          type: string
+          format: date-time
+          description: 終了日時
+        status:
+          type: string
+          enum: ["Request", "Approve", "Rejected"]
+          description: ステータス
+    PutRequest:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+          description: 開始日時
+        end:
+          type: string
+          format: date-time
+          description: 終了日時
+        status:
+          type: string
+          enum: ["Request", "Approve", "Rejected"]
+          description: ステータス
+    Request:
+      type: object
+      required:
+        - id
+        - start
+        - end
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: 申請ID
+        start:
+          type: string
+          format: date-time
+          description: 開始日時
+        end:
+          type: string
+          format: date-time
+          description: 終了日時
+        status:
+          type: string
+          enum: ["Request", "Approve", "Rejected"]
+          description: ステータス
+        createdAt:
+          type: string
+          format: date-time
+          description: 作成日時
+        updatedAt:
+          type: string
+          format: date-time
+          description: 更新日時
