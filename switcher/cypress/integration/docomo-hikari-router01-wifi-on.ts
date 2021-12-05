@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 it('Wi-Fi On', () => {
-  cy.visit('http://192.168.1.2/wlbasic5.htm', {
+  cy.visit('http://192.168.10.1/wlbasic5.htm', {
     auth: {
       username: Cypress.env('USER_NAME'),
       password: Cypress.env('PASSWORD'),
