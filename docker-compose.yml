@@ -6,15 +6,14 @@ services:
       context: .
       dockerfile: ./docker/switcher/Dockerfile 
     environment:
-      CYPRESS_USER_NAME: ${CYPRESS_USER_NAME:?error}
-      CYPRESS_PASSWORD: ${CYPRESS_PASSWORD:?error}
+      ROUTER_USER_NAME: ${ROUTER_USER_NAME:?error}
+      ROUTER_PASSWORD: ${ROUTER_PASSWORD:?error}
       TARGET_ROUTER: ${TARGET_ROUTER?error}
       API_END_POINT: ${API_END_POINT:-http://web:5000}
       TZ: ${TZ:-Asia/Tokyo}
     volumes:
-      - ./data/videos:/usr/local/src/cypress/videos
-      - ./data/screenshots:/usr/local/src/cypress/screenshots
-      - ./data:/usr/local/data
+      - ./data/latest_logs:/usr/local/src/latest_logs
+      - ./data/archived_logs:/usr/local/src/archived_logs
     logging:
       driver: 'json-file'
       options:
