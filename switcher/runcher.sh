@@ -30,12 +30,12 @@ while IFS=, read start end status; do
   [[ "${status}" != "Approve" ]] && continue  # 承認済みデータ判定
 
   [[ "${latest_status}" != 'ON' ]] \
-    && (yarn cypress run -s "./cypress/integration/${TARGET_ROUTER}-wifi-on.ts" || true) \
+    && pytest -s "./selenium/${TARGET_ROUTER}-wifi-on.py" \
     && echo -n 'ON' > "${status_file}"
 
   exit 0
 done < "${schedule}"
 
 [[ "${latest_status}" != 'OFF' ]] \
-  && (yarn cypress run -s "./cypress/integration/${TARGET_ROUTER}-wifi-off.ts" || true) \
+  && pytest -s "./selenium/${TARGET_ROUTER}-wifi-off.py" \
   && echo -n 'OFF' > "${status_file}"

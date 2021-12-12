@@ -1,4 +1,4 @@
-node_modules
-cypress/screenshots
-cypress/videos
-cypress.env.json
+latest_logs
+.pytest_cache
+archived_logs
+__pycache__
