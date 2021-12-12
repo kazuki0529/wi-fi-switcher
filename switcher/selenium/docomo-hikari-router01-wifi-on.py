@@ -15,15 +15,14 @@ class AppTest(BaseCase):
 
         self.save_screenshot_to_logs('before.png')
 
-        if self.get_value('#wl_disable1') == '使用する':
+        if self.get_value('#wl_disable1') == 'ON':
             print('Wi-Fi is already enabled.')
             return
 
-        self.select_option_by_text('#wl_disable1', '使用する')
+        self.select_option_by_value('#wl_disable1', 'ON')
         self.save_screenshot_to_logs('after.png')
         print('Enables the Wi-Fi.')
 
         self.submit('form[name="wlanSetup"]')
-        self.accept_alert()
 
         self.click('#restartNow')
