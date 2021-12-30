@@ -1,10 +1,19 @@
-import * as dynamo from '@aws-cdk/aws-dynamodb';
-import { Construct, RemovalPolicy, Stack, StackProps } from '@aws-cdk/core';
+import * as certificate from '@aws-cdk/aws-certificatemanager';
+import * as cloudfront from '@aws-cdk/aws-cloudfront';
+import * as iam from '@aws-cdk/aws-iam';
+// import * as route53 from '@aws-cdk/aws-route53';
+// import * as targets from '@aws-cdk/aws-route53-targets';
+import * as s3 from '@aws-cdk/aws-s3';
+import * as s3deploy from '@aws-cdk/aws-s3-deployment';
+import * as cdk from '@aws-cdk/core';
+
+import { Construct, Stack, StackProps } from '@aws-cdk/core';
 
 export type StackStage = 'staging' | 'prod';
 
 export class WiFiSwitcherStack extends Stack {
-  public readonly table: dynamo.Table;
+  public readonly webBucket: s3.Bucket;
+  public readonly distribution: cloudfront.CloudFrontWebDistribution;
 
   constructor(
     scope: Construct, id: string,
@@ -12,30 +21,79 @@ export class WiFiSwitcherStack extends Stack {
   ) {
     super(scope, id, props);
 
-    // データ格納領域作成
-    this.table =new dynamo.Table(this, 'data', {
-      partitionKey: {
-        name: '_p_key',
-        type: dynamo.AttributeType.STRING,
-      },
-      sortKey: {
-        name: '_s_key',
-        type: dynamo.AttributeType.STRING,
-      },
-      removalPolicy: RemovalPolicy.DESTROY,
-      billingMode: dynamo.BillingMode.PAY_PER_REQUEST,
+    /**
+     * Webコンテンツのリリース先バケット
+    **/
+    this.webBucket = new s3.Bucket(this, 'web-bucket', {
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      encryption: s3.BucketEncryption.S3_MANAGED,
     });
-    this.table.addGlobalSecondaryIndex({
-      indexName: 'GSI-1',
-      partitionKey: {
-        name: '_gsi1_p_key',
-        type: dynamo.AttributeType.STRING,
-      },
-      sortKey: {
-        name: '_gsi1_s_key',
-        type: dynamo.AttributeType.STRING,
-      },
-      projectionType: dynamo.ProjectionType.ALL,
+    /**
+     * CloudFrontを経由しないアクセスは拒否りたいので、OAIを作成する
+    **/
+    const oai = new cloudfront.OriginAccessIdentity(this, 'web-oai', {
+      comment: 's3 access.',
+    });
+    /**
+     * 作成したOAIからのアクセスを許可するポリシー
+    **/
+    const policy = new iam.PolicyStatement({
+      effect: iam.Effect.ALLOW,
+      actions: ['s3:GetObject'],
+      principals: [new iam.CanonicalUserPrincipal(oai.cloudFrontOriginAccessIdentityS3CanonicalUserId)],
+      resources: [
+        this.webBucket.bucketArn + '/*',
+      ],
+    });
+    this.webBucket.addToResourcePolicy(policy);
+
+
+    /**
+     * CloudFront
+    **/
+    const fqdn = this.node.tryGetContext('FQDN');
+    const certArn = this.node.tryGetContext('CERT_ARN');
+    const cert = certArn
+      ? certificate.Certificate.fromCertificateArn(this, 'CertificateForTheDomain', certArn)
+      : undefined;
+    this.distribution = new cloudfront.CloudFrontWebDistribution(this, 'cfn-distribution', {
+      originConfigs: [
+        {
+          s3OriginSource: {
+            s3BucketSource: this.webBucket,
+            originAccessIdentity: oai,
+          },
+          behaviors: [{ isDefaultBehavior: true }],
+        },
+      ],
+      priceClass: cloudfront.PriceClass.PRICE_CLASS_200,
+      viewerCertificate: cert
+        ? cloudfront.ViewerCertificate.fromAcmCertificate(cert, {
+          aliases: [fqdn],
+        })
+        : {
+          aliases: [],
+          props: {
+            cloudFrontDefaultCertificate: true,
+          },
+        },
+    });
+
+    /**
+     * デプロイ
+    **/
+    new s3deploy.BucketDeployment(this, 's3-deploy', {
+      sources: [s3deploy.Source.asset('./web/static/')],
+      destinationBucket: this.webBucket,
+      distribution: this.distribution,
+    });
+
+    // CloudFrontのアクセスURLを出力
+    new cdk.CfnOutput(this, 'UiCloudFrontUrl', {
+      value: `https://${this.distribution.distributionDomainName}/`,
+    });
+    new cdk.CfnOutput(this, 'UiAccessUrl', {
+      value: `https://${fqdn}/`,
     });
   }
 }

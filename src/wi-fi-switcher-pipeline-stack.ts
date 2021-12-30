@@ -13,8 +13,12 @@ import {
   SimpleSynthAction,
 } from '@aws-cdk/pipelines';
 import {
+  WiFiSwitcherApiStack,
+} from './wi-fi-switcher-api-stack';
+import {
   WiFiSwitcherStack,
 } from './wi-fi-switcher-stack';
+
 
 class Application extends Stage {
   constructor(
@@ -24,6 +28,10 @@ class Application extends Stage {
   ) {
     super(scope, id, props);
 
+    new WiFiSwitcherApiStack(
+      this,
+      'wi-fi-switcher-api',
+    );
     new WiFiSwitcherStack(
       this,
       'wi-fi-switcher',
