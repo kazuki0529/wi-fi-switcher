@@ -46,9 +46,10 @@ const project = new AwsCdkTypeScriptApp({
     'aws-xray-sdk',
     'moment',
     'type-guards',
+    '@types/uuid',
     'uuid',
   ],
-  devDeps: ['esbuild'],
+  devDeps: ['esbuild', 'aws-sdk-client-mock'],
   // description: undefined,      /* The description is just a string that helps people understand the purpose of the package. */
   // packageName: undefined,      /* The "name" in package.json. */
   // release: undefined,          /* Add release management to this project. */

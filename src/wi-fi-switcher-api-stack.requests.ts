@@ -17,8 +17,8 @@ export async function handler(
 
         const req = {
           ...body,
-          start: moment(body.start),
-          end: moment(body.end),
+          start: body.start ? moment(body.start) : undefined,
+          end: body.end ? moment(body.end) : undefined,
         };
 
         const data = await usecase.create(req);
@@ -30,6 +30,7 @@ export async function handler(
           body: JSON.stringify(data),
         };
       }
+
       if (event.httpMethod === 'GET') {
         const data = await usecase.getAll();
         return {
