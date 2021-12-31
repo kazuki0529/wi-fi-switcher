@@ -6,7 +6,18 @@ Wi-FiをOn/Offするプログラム。
 ## コマンドライン
 
 ```bash
-cd src
-yarn cypress run -s ./cypress/integration/PR-500KI-wifi-on.ts 
-yarn cypress run -s ./cypress/integration/PR-500KI-wifi-off.ts 
+cd switcher
+pytest -s "./selenium/PR-500KI-wifi-on.py"
+pytest -s "./selenium/PR-500KI-wifi-off.py"
+```
+
+## デプロイ
+
+```bash
+fqdn={your domain}                  # Optional
+cert_arn={your certification arn}   # Optional
+
+yarn cdk deploy \
+  -c "FQDN=${fqdn}" \
+  -c "CERT_ARN~${cert_arn}"
 ```

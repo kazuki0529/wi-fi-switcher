@@ -50,4 +50,5 @@ junit.xml
 yarn-error.log
 .env
 data/
+.idea
 !/.github/workflows/upgrade.yml

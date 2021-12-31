@@ -58,12 +58,16 @@
     "redhat.vscode-yaml",
     "dbaeumer.vscode-eslint",
     "amazonwebservices.aws-toolkit-vscode",
-    "github.vscode-pull-request-github"
+    "github.vscode-pull-request-github",
+    "42crunch.vscode-openapi"
   ],
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "pip3 install --user -r ./web/requirements.txt && yarn && pip3 install --user -r ./switcher/requirements.txt && sbase install chromedriver latest",
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-  "remoteUser": "vscode"
+  "remoteUser": "vscode",
+  "features": {
+    "docker-from-docker": "latest"
+  }
 }
