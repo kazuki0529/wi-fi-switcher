@@ -121,7 +121,7 @@ export default function RequestRepository(): IRequestRepository {
       const now = moment();
       const gsi1 = data.status ? {
         _gsi1_p_key: 'REQUEST#STATUS',
-        _gsi1_s_key: STATUS_TO_NUM[data.status],
+        _gsi1_s_key: STATUS_TO_NUM[data.status as keyof typeof STATUS_TO_NUM],
       } : {};
       const item = {
         ...data,
