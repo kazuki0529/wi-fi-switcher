@@ -300,7 +300,7 @@
     "@aws-cdk/custom-resources" "1.137.0"
     constructs "^3.3.69"
 
-"@aws-cdk/aws-ec2@1.137.0":
+"@aws-cdk/aws-ec2@1.137.0", "@aws-cdk/aws-ec2@^1.137.0":
   version "1.137.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-ec2/-/aws-ec2-1.137.0.tgz#987f78f68be6f741229b3e2ae3ae78219f6be978"
   integrity sha512-Ms/0SYOECB9tEggjgQbKe+8aqzZaT/sKnDckiDJjtI8CG/q53ETnrhqDIZgyUc96trAnXuExuEnTxlexoB3BLA==
@@ -2300,10 +2300,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.60.tgz#35f3d6213daed95da7f0f73e75bcc6980e90597b"
   integrity sha512-F0KIgDJfy2nA3zMLmWGKxcH2ZVEtCZXHHdOQs2gSaQ27+lNeEfGxzkIw90aXswATX7AZ33tahPbzy6KAfUreVw==
 
-"@types/node@^14.17.0":
-  version "14.18.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.4.tgz#b722d6c91f156d9359aeb20f2d7d06337b15c603"
-  integrity sha512-swe3lD4izOJWHuxvsZdDFRq6S9i6koJsXOnQKYekhSO5JTizMVirUFgY/bUsaOJQj8oSD4oxmRYPBM/0b6jpdw==
+"@types/node@^12":
+  version "12.20.40"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.20.40.tgz#5f4345ac29efe3ad490127f3b69884e7d22743ee"
+  integrity sha512-RX6hFa0hxkFuktu5629zJEkWK5e0HreW4vpNSLn4nWkOui7CTGCjtKiKpvtZ4QwCZ2Am5uhrb5ULHKNyunYYqg==
 
 "@types/pg@*":
   version "8.6.3"
@@ -3268,6 +3268,11 @@ console-control-strings@^1.0.0, console-control-strings@^1.1.0:
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
+constructs@^3.2.27:
+  version "3.3.177"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.3.177.tgz#e0f49f27d99b1864e7b1236e68fc42a60685749b"
+  integrity sha512-M0KmQwqp5EBybXDY/8JTJlFLyT3Qoy6Xf67hjuWn2tDAJura91rPz2jhOxCt1C9GlES2dSvyZcLx/H7B0zsGLQ==
+
 constructs@^3.3.69:
   version "3.3.176"
   resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.3.176.tgz#3890726932a5e0b7657fb7e6976b685352208a90"
@@ -3871,7 +3876,7 @@ eslint-visitor-keys@^3.0.0, eslint-visitor-keys@^3.1.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-3.1.0.tgz#eee4acea891814cda67a7d8812d9647dd0179af2"
   integrity sha512-yWJFpu4DtjsWKkt5GeNBBuZMlNcYVs6vRCLoCVEJrTjaSB6LC98gFipNK/erM2Heg/E8mIK+hXG/pJMLK+eRZA==
 
-eslint@^8.6.0:
+eslint@^8:
   version "8.6.0"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.6.0.tgz#4318c6a31c5584838c1a2e940c478190f58d558e"
   integrity sha512-UvxdOJ7mXFlw7iuHZA4jmzPaUqIw54mZrv+XPYKNbKdLR0et4rf60lIZUU9kiNtnzzMzGWxMV+tQ7uG7JG8DPw==

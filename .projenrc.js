@@ -24,6 +24,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '@aws-cdk/aws-codepipeline-actions',
     '@aws-cdk/aws-iam',
     '@aws-cdk/aws-logs',
+    '@aws-cdk/aws-ec2',
   ],
   context: {
     '@aws-cdk/core:newStyleStackSynthesis': true,
