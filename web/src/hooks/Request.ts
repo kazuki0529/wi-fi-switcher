@@ -15,6 +15,8 @@ export interface RequestState {
   reject: (id: string) => Promise<void>
 }
 
+const API_ENDPOINT = process.env.REACT_APP_API_URL ?? ''
+
 export function useRequest(): RequestState {
   const [data, setData] = useState<Request | undefined>(undefined)
   const [loading, setLoading] = useState<boolean>(false)
@@ -26,7 +28,7 @@ export function useRequest(): RequestState {
 
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/requests/${id}`,
+        `${API_ENDPOINT}/api/v1/requests/${id}`,
         { status: status }
       )
       setData({
@@ -58,7 +60,7 @@ export function useRequest(): RequestState {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/requests`,
+        `${API_ENDPOINT}/api/v1/requests`,
         {
           ...data,
           status: 'Request',

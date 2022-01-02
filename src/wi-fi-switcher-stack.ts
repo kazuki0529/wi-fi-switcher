@@ -1,3 +1,4 @@
+import * as apigateway from '@aws-cdk/aws-apigateway';
 import * as certificate from '@aws-cdk/aws-certificatemanager';
 import * as cloudfront from '@aws-cdk/aws-cloudfront';
 import * as iam from '@aws-cdk/aws-iam';
@@ -6,10 +7,14 @@ import * as iam from '@aws-cdk/aws-iam';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as s3deploy from '@aws-cdk/aws-s3-deployment';
 import * as cdk from '@aws-cdk/core';
-
 import { Construct, Stack, StackProps } from '@aws-cdk/core';
 
+
 export type StackStage = 'staging' | 'prod';
+
+interface WiFiSwitcherStackProps extends StackProps {
+  readonly api: apigateway.RestApi;
+}
 
 export class WiFiSwitcherStack extends Stack {
   public readonly webBucket: s3.Bucket;
@@ -17,7 +22,7 @@ export class WiFiSwitcherStack extends Stack {
 
   constructor(
     scope: Construct, id: string,
-    props?: StackProps,
+    props: WiFiSwitcherStackProps,
   ) {
     super(scope, id, props);
 
@@ -64,6 +69,24 @@ export class WiFiSwitcherStack extends Stack {
             originAccessIdentity: oai,
           },
           behaviors: [{ isDefaultBehavior: true }],
+        },
+        {
+          customOriginSource: {
+            domainName: `${props.api.restApiId}.execute-api.${this.region}.${this.urlSuffix}`,
+          },
+          behaviors: [
+            {
+              pathPattern: `${props.api.deploymentStage.stageName}/*`,
+              allowedMethods: cloudfront.CloudFrontAllowedMethods.ALL,
+              forwardedValues: {
+                headers: ['Content-Type', 'Accept', 'Accept-Encoding', 'Accept-Language', 'Authorization', 'Origin'],
+                queryString: true,
+              },
+              defaultTtl: cdk.Duration.seconds(0),
+              maxTtl: cdk.Duration.seconds(0),
+              minTtl: cdk.Duration.seconds(0),
+            },
+          ],
         },
       ],
       priceClass: cloudfront.PriceClass.PRICE_CLASS_200,
