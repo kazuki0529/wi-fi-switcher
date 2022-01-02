@@ -83,7 +83,7 @@ export class WiFiSwitcherApiStack extends Stack {
       }),
       deployOptions: {
         tracingEnabled: true,
-        stageName: 'prod',
+        stageName: 'api',
       },
     });
     const baseApi = this.api.root.addResource('v1');

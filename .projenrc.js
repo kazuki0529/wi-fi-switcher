@@ -72,6 +72,8 @@ const reactProject = new web.ReactTypeScriptProject({
     'axios',
     'type-guards',
     '@mui/material',
+    '@mui/lab@5.0.0-alpha.62',
+    'date-fns',
     '@emotion/react',
     '@emotion/styled',
     '@mui/icons-material',

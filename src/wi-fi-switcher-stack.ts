@@ -83,7 +83,7 @@ export class WiFiSwitcherStack extends Stack {
      * デプロイ
     **/
     new s3deploy.BucketDeployment(this, 's3-deploy', {
-      sources: [s3deploy.Source.asset('./web/static/')],
+      sources: [s3deploy.Source.asset('./web/build/')],
       destinationBucket: this.webBucket,
       distribution: this.distribution,
     });

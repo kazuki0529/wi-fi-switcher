@@ -8,6 +8,9 @@ export interface RequestState {
   readonly loading: boolean
   readonly error: string | undefined
   setData: (data: Request) => void
+  create: (
+    data: Omit<Request, 'id' | 'status' | 'createdAt' | 'updatedAt'>
+  ) => Promise<void>
   approve: (id: string) => Promise<void>
   reject: (id: string) => Promise<void>
 }
@@ -18,8 +21,6 @@ export function useRequest(): RequestState {
   const [error, setError] = useState<string | undefined>(undefined)
 
   const updateStatus = async (id: string, status: Status) => {
-    if (!data) return
-
     setError(undefined)
     setLoading(true)
 
@@ -49,11 +50,42 @@ export function useRequest(): RequestState {
     await updateStatus(id, 'Rejected')
   }
 
+  const create = async (
+    data: Omit<Request, 'id' | 'status' | 'createdAt' | 'updatedAt'>
+  ) => {
+    setError(undefined)
+    setLoading(true)
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/requests`,
+        {
+          ...data,
+          status: 'Request',
+          start: data.start.toISOString(),
+          end: data.end.toISOString(),
+        }
+      )
+      setData({
+        ...response.data,
+        start: moment(response.data.start),
+        end: moment(response.data.end),
+        createdAt: moment(response.data.createdAt),
+        updatedAt: moment(response.data.updatedAt),
+      } as Request)
+      // } catch (e) {
+      //   setError(e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return {
     data,
     setData,
     loading,
     error,
+    create,
     approve,
     reject,
   }

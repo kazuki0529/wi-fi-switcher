@@ -136,7 +136,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @testing-library/jest-dom @testing-library/react @testing-library/user-event @types/jest @types/node @types/react @types/react-dom npm-check-updates typescript @emotion/react @emotion/styled @mui/icons-material @mui/material axios moment react react-dom react-scripts type-guards web-vitals"
+          "exec": "yarn upgrade @testing-library/jest-dom @testing-library/react @testing-library/user-event @types/jest @types/node @types/react @types/react-dom npm-check-updates typescript @emotion/react @emotion/styled @mui/icons-material @mui/lab @mui/material axios date-fns moment react react-dom react-scripts type-guards web-vitals"
         },
         {
           "exec": "npx projen"

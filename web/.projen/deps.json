@@ -56,11 +56,20 @@
       "type": "runtime"
     },
     {
+      "name": "@mui/lab",
+      "version": "5.0.0-alpha.62",
+      "type": "runtime"
+    },
+    {
       "name": "@mui/material",
       "type": "runtime"
     },
     {
       "name": "axios",
+      "type": "runtime"
+    },
+    {
+      "name": "date-fns",
       "type": "runtime"
     },
     {

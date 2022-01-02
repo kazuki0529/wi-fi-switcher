@@ -24,16 +24,18 @@ export function useRequestList(): RequestList {
         `${process.env.REACT_APP_API_URL}/api/v1/requests`
       )
       setData(
-        response.data.map(
-          (e: Record<string, string>) =>
-            ({
-              ...e,
-              start: moment(e.start),
-              end: moment(e.end),
-              createdAt: moment(e.createdAt),
-              updatedAt: moment(e.updatedAt),
-            } as Request)
-        )
+        response.data
+          .map(
+            (e: Record<string, string>) =>
+              ({
+                ...e,
+                start: moment(e.start),
+                end: moment(e.end),
+                createdAt: moment(e.createdAt),
+                updatedAt: moment(e.updatedAt),
+              } as Request)
+          )
+          .sort((curr: Request, prev: Request) => prev.start.diff(curr.start))
       )
       // } catch (e) {
       //   setError(e.message)

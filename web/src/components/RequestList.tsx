@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 
-import { Button, List, ListItem, ListItemIcon, ListItemText, LinearProgress, Chip, Card, CardContent, CardActions, Typography, Grid, Zoom, Switch, FormGroup, FormControlLabel } from '@mui/material';
+import { Fade, Alert, AlertTitle, Fab, Button, List, ListItem, ListItemIcon, ListItemText, LinearProgress, Chip, Card, CardContent, CardActions, Typography, Grid, Zoom, Switch, FormGroup, FormControlLabel } from '@mui/material';
 import { useRequest } from '../hooks/Request';
 import { useRequestList } from '../hooks/RequestList';
 import { TransitionGroup } from 'react-transition-group';
@@ -10,11 +10,15 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import StartIcon from '@mui/icons-material/Start';
 import CheckIcon from '@mui/icons-material/Check';
 import SportsScoreIcon from '@mui/icons-material/SportsScore';
+import Request from './Request'
+import AddIcon from '@mui/icons-material/Add';
 
 
 const RequestList: React.FC = () => {
   const request = useRequest();
   const requestList = useRequestList();
+
+  const [showForm, setShowForm] = useState<boolean>(false)
   const [showAll, setShowAll] = useState<boolean>(false);
 
   return (
@@ -24,7 +28,18 @@ const RequestList: React.FC = () => {
           control={<Switch checked={showAll} onChange={(event) => { setShowAll(event.target.checked) }} />}
           label="すべて表示" />
       </FormGroup>
-      {requestList.loading || request.loading ? <LinearProgress /> : <div />}
+      <Fade in={requestList.loading || request.loading}>
+        <LinearProgress />
+      </Fade>
+
+      {(requestList.data.filter(req => req.status === 'Request').length === 0 && !requestList.loading && !showAll) ?
+        <Zoom in={requestList.data.filter(req => req.status === 'Request').length === 0 && !requestList.loading && !showAll}>
+          <Alert severity="info">
+            <AlertTitle>Info</AlertTitle>
+            現在承認するゲームプレイ申請はありません。
+          </Alert>
+        </Zoom> : <div />
+      }
 
       <Grid container spacing={2} sx={{ mt: 2 }}>
         {requestList.data.filter(req => req.status === 'Request' || showAll).map((req) => (
@@ -49,7 +64,7 @@ const RequestList: React.FC = () => {
                           <StartIcon />
                         </ListItemIcon>
                         <ListItemText
-                          primary={req.start.format("YYYY-MM-DD HH:mm:ss")}
+                          primary={req.start.local().format("YYYY-MM-DD HH:mm:ss")}
                         />
                       </ListItem>
                       <ListItem>
@@ -57,7 +72,7 @@ const RequestList: React.FC = () => {
                           <SportsScoreIcon />
                         </ListItemIcon>
                         <ListItemText
-                          primary={req.end.format("YYYY-MM-DD HH:mm:ss")}
+                          primary={req.end.local().format("YYYY-MM-DD HH:mm:ss")}
                         />
                       </ListItem>
                     </List>
@@ -88,6 +103,18 @@ const RequestList: React.FC = () => {
           </Grid>
         ))}
       </Grid>
+
+      <Fab color="primary" aria-label="add" onClick={() => setShowForm(true)} sx={{
+        margin: 0,
+        top: 'auto',
+        right: 20,
+        bottom: 20,
+        left: 'auto',
+        position: 'fixed',
+      }}>
+        <AddIcon />
+      </Fab>
+      <Request open={showForm} onClose={() => { setShowForm(false); requestList.reload(); }} />
     </div>
   );
 };
