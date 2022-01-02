@@ -13,24 +13,34 @@
     "test": "npx projen test",
     "upgrade": "npx projen upgrade",
     "upgrade-projen": "npx projen upgrade-projen",
+    "watch": "npx projen watch",
     "projen": "npx projen"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.4.0",
+    "@types/node": "^12",
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
     "npm-check-updates": "^12",
-    "projen": "^0.47.13"
+    "projen": "^0.47.14",
+    "typescript": "^4.0.3"
   },
   "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.2.5",
+    "@mui/material": "^5.2.6",
     "axios": "^0.24.0",
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "^5",
+    "type-guards": "^0.15.0",
     "web-vitals": "^2.1.2"
   },
-  "main": "lib/index.js",
   "license": "Apache-2.0",
   "version": "0.0.0",
   "eslintConfig": {

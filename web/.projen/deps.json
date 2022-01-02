@@ -13,6 +13,23 @@
       "type": "build"
     },
     {
+      "name": "@types/jest",
+      "type": "build"
+    },
+    {
+      "name": "@types/node",
+      "version": "^12",
+      "type": "build"
+    },
+    {
+      "name": "@types/react",
+      "type": "build"
+    },
+    {
+      "name": "@types/react-dom",
+      "type": "build"
+    },
+    {
       "name": "npm-check-updates",
       "version": "^12",
       "type": "build"
@@ -20,6 +37,27 @@
     {
       "name": "projen",
       "type": "build"
+    },
+    {
+      "name": "typescript",
+      "version": "^4.0.3",
+      "type": "build"
+    },
+    {
+      "name": "@emotion/react",
+      "type": "runtime"
+    },
+    {
+      "name": "@emotion/styled",
+      "type": "runtime"
+    },
+    {
+      "name": "@mui/icons-material",
+      "type": "runtime"
+    },
+    {
+      "name": "@mui/material",
+      "type": "runtime"
     },
     {
       "name": "axios",
@@ -40,6 +78,10 @@
     {
       "name": "react-scripts",
       "version": "^5",
+      "type": "runtime"
+    },
+    {
+      "name": "type-guards",
       "type": "runtime"
     },
     {

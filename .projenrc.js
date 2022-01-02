@@ -62,7 +62,7 @@ project.gitignore.exclude(...excludes);
 
 project.synth();
 
-const reactProject = new web.ReactProject({
+const reactProject = new web.ReactTypeScriptProject({
   parent: project,
   name: 'wi-fi-switcher-web',
   defaultReleaseBranch: 'main',
@@ -70,6 +70,11 @@ const reactProject = new web.ReactProject({
   deps: [
     'moment',
     'axios',
+    'type-guards',
+    '@mui/material',
+    '@emotion/react',
+    '@emotion/styled',
+    '@mui/icons-material',
   ],
 });
 
