@@ -22,7 +22,7 @@ Object {
             },
             "/",
             Object {
-              "Ref": "gameplayDeploymentStageprodCD6A8D4E",
+              "Ref": "gameplayDeploymentStageapiE6CF920D",
             },
             "/",
           ],
@@ -48,7 +48,7 @@ Object {
             },
             "/",
             Object {
-              "Ref": "gameplayDeploymentStageprodCD6A8D4E",
+              "Ref": "gameplayDeploymentStageapiE6CF920D",
             },
             "/",
           ],
@@ -272,7 +272,7 @@ Object {
               "Principal": Object {
                 "AWS": "*",
               },
-              "Resource": "execute-api:/prod/*",
+              "Resource": "execute-api:/api/*",
             },
           ],
           "Version": "2012-10-17",
@@ -311,7 +311,7 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "gameplayDeployment07985458193910b7b75d6fd0a20c3b7ecbda6ca8": Object {
+    "gameplayDeployment07985458a2d59f3fb24c60e2d2f44612dfa77386": Object {
       "DependsOn": Array [
         "gameplayv1requestsrequestIdPUT2A3654A7",
         "gameplayv1requestsrequestIdE02902C3",
@@ -328,18 +328,26 @@ Object {
       },
       "Type": "AWS::ApiGateway::Deployment",
     },
-    "gameplayDeploymentStageprodCD6A8D4E": Object {
+    "gameplayDeploymentStageapiE6CF920D": Object {
       "DependsOn": Array [
         "gameplayAccount6A9FD56E",
       ],
       "Properties": Object {
         "DeploymentId": Object {
-          "Ref": "gameplayDeployment07985458193910b7b75d6fd0a20c3b7ecbda6ca8",
+          "Ref": "gameplayDeployment07985458a2d59f3fb24c60e2d2f44612dfa77386",
         },
+        "MethodSettings": Array [
+          Object {
+            "DataTraceEnabled": false,
+            "HttpMethod": "*",
+            "LoggingLevel": "INFO",
+            "ResourcePath": "/*",
+          },
+        ],
         "RestApiId": Object {
           "Ref": "gameplayCFF713D3",
         },
-        "StageName": "prod",
+        "StageName": "api",
         "TracingEnabled": true,
       },
       "Type": "AWS::ApiGateway::Stage",
@@ -480,7 +488,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "gameplayDeploymentStageprodCD6A8D4E",
+                "Ref": "gameplayDeploymentStageapiE6CF920D",
               },
               "/GET/v1/requests",
             ],
@@ -598,7 +606,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "gameplayDeploymentStageprodCD6A8D4E",
+                "Ref": "gameplayDeploymentStageapiE6CF920D",
               },
               "/POST/v1/requests",
             ],
@@ -728,7 +736,7 @@ Object {
               },
               "/",
               Object {
-                "Ref": "gameplayDeploymentStageprodCD6A8D4E",
+                "Ref": "gameplayDeploymentStageapiE6CF920D",
               },
               "/PUT/v1/requests/*",
             ],
