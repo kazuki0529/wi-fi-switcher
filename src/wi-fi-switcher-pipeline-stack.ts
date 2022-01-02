@@ -28,13 +28,14 @@ class Application extends Stage {
   ) {
     super(scope, id, props);
 
-    new WiFiSwitcherApiStack(
+    const apiStack = new WiFiSwitcherApiStack(
       this,
       'wi-fi-switcher-api',
     );
     new WiFiSwitcherStack(
       this,
       'wi-fi-switcher',
+      { api: apiStack.api },
     );
   }
 }
@@ -66,15 +67,27 @@ export class WiFiSwitcherPipelineStack extends Stack {
         cloudAssemblyArtifact,
         environment: {
           privileged: true,
+          environmentVariables: {
+            APP_CERT_ARN: {
+              value: this.node.tryGetContext('CERT_ARN') ?? '',
+            },
+            APP_ZONE_ID: {
+              value: this.node.tryGetContext('ZONE_ID') ?? '',
+            },
+            APP_ZONE_NAME: {
+              value: this.node.tryGetContext('ZONE_NAME') ?? '',
+            },
+            APP_FQDN: { value: this.node.tryGetContext('FQDN') ?? '' },
+          },
         },
-        synthCommand: 'npx cdk synth',
+        installCommand: 'yarn install --frozen-lockfile && (cd ./web && yarn install --frozen-lockfile)',
+        buildCommand: '(cd ./web && yarn build)',
+        synthCommand: 'npx cdk synth -c CERT_ARN=${CERT_ARN} -c ZONE_ID=${ZONE_ID} -c ZONE_NAME=${ZONE_NAME} -c FQDN=${FQDN}',
       }),
     });
 
     // 開発用のDeploy
-    pipeline.addApplicationStage(
-      new Application(this, 'staging'),
-    );
+    pipeline.addApplicationStage(new Application(this, 'staging'));
 
     // 本番用のDeploy
     pipeline.addApplicationStage(

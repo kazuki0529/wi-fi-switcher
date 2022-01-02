@@ -1,5 +1,6 @@
-const { AwsCdkTypeScriptApp } = require('projen');
-const project = new AwsCdkTypeScriptApp({
+const { awscdk, web } = require('projen');
+
+const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '1.137.0',
   defaultReleaseBranch: 'main',
   name: 'wi-fi-switcher',
@@ -50,6 +51,7 @@ const project = new AwsCdkTypeScriptApp({
     'uuid',
   ],
   devDeps: ['esbuild', 'aws-sdk-client-mock'],
+  devContainer: true,
   // description: undefined,      /* The description is just a string that helps people understand the purpose of the package. */
   // packageName: undefined,      /* The "name" in package.json. */
   // release: undefined,          /* Add release management to this project. */
@@ -59,3 +61,23 @@ const excludes = ['yarn-error.log', '.env', 'data/', '.idea'];
 project.gitignore.exclude(...excludes);
 
 project.synth();
+
+const reactProject = new web.ReactTypeScriptProject({
+  parent: project,
+  name: 'wi-fi-switcher-web',
+  defaultReleaseBranch: 'main',
+  outdir: 'web',
+  deps: [
+    'moment',
+    'axios',
+    'type-guards',
+    '@mui/material',
+    '@mui/lab@5.0.0-alpha.62',
+    'date-fns',
+    '@emotion/react',
+    '@emotion/styled',
+    '@mui/icons-material',
+  ],
+});
+
+reactProject.synth();

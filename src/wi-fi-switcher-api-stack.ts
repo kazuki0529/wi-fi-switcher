@@ -77,13 +77,14 @@ export class WiFiSwitcherApiStack extends Stack {
             principals: [new iam.AnyPrincipal()],
             effect: iam.Effect.ALLOW,
             actions: ['execute-api:Invoke'],
-            resources: ['execute-api:/prod/*'],
+            resources: ['execute-api:/api/*'],
           }),
         ],
       }),
       deployOptions: {
         tracingEnabled: true,
-        stageName: 'prod',
+        stageName: 'api',
+        loggingLevel: apigateway.MethodLoggingLevel.INFO,
       },
     });
     const baseApi = this.api.root.addResource('v1');

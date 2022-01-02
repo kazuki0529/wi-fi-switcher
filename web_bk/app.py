@@ -5,6 +5,7 @@ from os import environ
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 from flask import Flask, jsonify, request, make_response
+from flask_cors import CORS
 
 table = boto3.resource('dynamodb').Table(environ['TABLE_NAME'])
 status2num = {
@@ -42,7 +43,8 @@ def get_request_list():
         )
         items.extend(res['Items'])
 
-    return jsonify([{k: v for k, v in row.items() if not k.startswith('_')} for row in items])
+    response = jsonify([{k: v for k, v in row.items() if not k.startswith('_')} for row in items])
+    return response
 
 
 @app.route('/api/v1/requests', methods=['POST'])
@@ -65,7 +67,8 @@ def post_request():
         Item=item
     )
 
-    return jsonify({k: v for k, v in item.items() if not k.startswith('_')})
+    response = jsonify({k: v for k, v in item.items() if not k.startswith('_')})
+    return response
 
 
 @app.route('/api/v1/requests/<id>', methods=['PUT'])
@@ -98,7 +101,8 @@ def update_request(id: str):
     new_item = table.update_item(**option)
 
     print(new_item['Attributes'])
-    return jsonify({k: v for k, v in new_item['Attributes'].items() if not k.startswith('_')})
+    response = jsonify({k: v for k, v in new_item['Attributes'].items() if not k.startswith('_')})
+    return response
 
 
 @app.route('/api/v1/requests/approve/now', methods=['GET'])
@@ -129,4 +133,5 @@ def get_approve_list():
     return response, 200
 
 
+CORS(app)
 app.run(host='0.0.0.0', port=5000, debug=True)
