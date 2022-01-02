@@ -67,14 +67,14 @@ export class WiFiSwitcherPipelineStack extends Stack {
         environment: {
           privileged: true,
         },
+        installCommand: 'yarn install --frozen-lockfile && (cd ./web && yarn install --frozen-lockfile)',
+        buildCommand: '(cd ./web && yarn build)',
         synthCommand: 'npx cdk synth',
       }),
     });
 
     // 開発用のDeploy
-    pipeline.addApplicationStage(
-      new Application(this, 'staging'),
-    );
+    pipeline.addApplicationStage(new Application(this, 'staging'));
 
     // 本番用のDeploy
     pipeline.addApplicationStage(
