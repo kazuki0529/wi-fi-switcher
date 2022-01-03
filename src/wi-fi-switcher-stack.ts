@@ -93,6 +93,7 @@ export class WiFiSwitcherStack extends Stack {
           ],
         },
       ],
+      geoRestriction: cloudfront.GeoRestriction.allowlist('JP'),
       priceClass: cloudfront.PriceClass.PRICE_CLASS_200,
       viewerCertificate: cert
         ? cloudfront.ViewerCertificate.fromAcmCertificate(cert, {
