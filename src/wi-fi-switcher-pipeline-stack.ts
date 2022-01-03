@@ -6,7 +6,6 @@ import {
   Stage,
   Stack,
   StackProps,
-  StageProps,
 } from '@aws-cdk/core';
 import {
   CdkPipeline,
@@ -16,26 +15,45 @@ import {
   WiFiSwitcherApiStack,
 } from './wi-fi-switcher-api-stack';
 import {
+  StackStage,
   WiFiSwitcherStack,
 } from './wi-fi-switcher-stack';
 
-
+interface StackStageProps extends StackProps {
+  readonly stage: StackStage;
+}
 class Application extends Stage {
   constructor(
     scope: Construct,
     id: string,
-    props?: StageProps,
+    props: StackStageProps,
   ) {
     super(scope, id, props);
 
+    // const cognito = new WiFiSwitcherCognitoStack(
+    //   this,
+    //   'wi-fi-switcher-cognito',
+    //   {
+    //     ...props,
+    //   },
+    // );
     const apiStack = new WiFiSwitcherApiStack(
       this,
       'wi-fi-switcher-api',
+      {
+        ...props,
+        // userPool: cognito.userPool,
+        // userPoolClient: cognito.userPoolClient,
+      },
     );
     new WiFiSwitcherStack(
       this,
       'wi-fi-switcher',
-      { api: apiStack.api },
+      {
+        ...props,
+        api: apiStack.api,
+        apiStage: apiStack.apiStage,
+      },
     );
   }
 }
@@ -52,49 +70,54 @@ export class WiFiSwitcherPipelineStack extends Stack {
       'repo',
       'wi-fi-switcher',
     ) as codecommit.Repository;
-
-    const pipeline = new CdkPipeline(this, 'Pipeline', {
-      pipelineName: 'Wi-Fi-SwitcherPipeline',
+    const sourceAction = new CodeCommitSourceAction ({
+      actionName: 'CodeCommit',
+      repository: repo,
+      branch: 'main',
+      output: sourceArtifact,
+    });
+    const synthProps = {
+      sourceArtifact,
       cloudAssemblyArtifact,
-      sourceAction: new CodeCommitSourceAction ({
-        actionName: 'CodeCommit',
-        repository: repo,
-        branch: 'main',
-        output: sourceArtifact,
-      }),
-      synthAction: SimpleSynthAction.standardYarnSynth({
-        sourceArtifact,
-        cloudAssemblyArtifact,
-        environment: {
-          privileged: true,
-          environmentVariables: {
-            APP_CERT_ARN: {
-              value: this.node.tryGetContext('CERT_ARN') ?? '',
-            },
-            APP_ZONE_ID: {
-              value: this.node.tryGetContext('ZONE_ID') ?? '',
-            },
-            APP_ZONE_NAME: {
-              value: this.node.tryGetContext('ZONE_NAME') ?? '',
-            },
-            APP_FQDN: { value: this.node.tryGetContext('FQDN') ?? '' },
+      environment: {
+        privileged: true,
+        environmentVariables: {
+          CERT_ARN: {
+            value: this.node.tryGetContext('CERT_ARN') ?? '',
+          },
+          ZONE_ID: {
+            value: this.node.tryGetContext('ZONE_ID') ?? '',
+          },
+          ZONE_NAME: {
+            value: this.node.tryGetContext('ZONE_NAME') ?? '',
           },
         },
-        installCommand: 'yarn install --frozen-lockfile && (cd ./web && yarn install --frozen-lockfile)',
-        buildCommand: '(cd ./web && yarn build)',
-        synthCommand: 'npx cdk synth -c CERT_ARN=${CERT_ARN} -c ZONE_ID=${ZONE_ID} -c ZONE_NAME=${ZONE_NAME} -c FQDN=${FQDN}',
+      },
+      installCommand: 'yarn install --frozen-lockfile && (cd ./web && yarn install --frozen-lockfile)',
+      buildCommand: '(cd ./web && yarn build)',
+      synthCommand: 'npx cdk synth -c "CERT_ARN=${CERT_ARN}" -c "ZONE_ID=${ZONE_ID}" -c "ZONE_NAME=${ZONE_NAME}"',
+    };
+
+    const pipeline = new CdkPipeline(this, 'pipeline-staging', {
+      pipelineName: 'Wi-Fi-SwitcherPipeline',
+      cloudAssemblyArtifact,
+      sourceAction,
+      synthAction: SimpleSynthAction.standardYarnSynth({
+        ...synthProps,
+        synthCommand: 'npx cdk synth -c "CERT_ARN=${CERT_ARN}" -c "ZONE_ID=${ZONE_ID}" -c "ZONE_NAME=${ZONE_NAME}"',
       }),
     });
 
     // 開発用のDeploy
-    pipeline.addApplicationStage(new Application(this, 'staging'));
+    pipeline.addApplicationStage(new Application(this, 'staging', { stage: 'staging' }));
 
     // 本番用のDeploy
     pipeline.addApplicationStage(
-      new Application(this, 'prod'),
+      new Application(this, 'prod', { stage: 'prod' }),
       {
         manualApprovals: true,
       },
     );
+
   }
 }

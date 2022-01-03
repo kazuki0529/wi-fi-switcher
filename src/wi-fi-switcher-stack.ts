@@ -1,9 +1,11 @@
-import * as apigateway from '@aws-cdk/aws-apigateway';
+import * as apigateway from '@aws-cdk/aws-apigatewayv2';
 import * as certificate from '@aws-cdk/aws-certificatemanager';
 import * as cloudfront from '@aws-cdk/aws-cloudfront';
 import * as iam from '@aws-cdk/aws-iam';
 // import * as route53 from '@aws-cdk/aws-route53';
 // import * as targets from '@aws-cdk/aws-route53-targets';
+import { ARecord, PublicHostedZone, RecordTarget } from '@aws-cdk/aws-route53';
+import { CloudFrontTarget } from '@aws-cdk/aws-route53-targets';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as s3deploy from '@aws-cdk/aws-s3-deployment';
 import * as cdk from '@aws-cdk/core';
@@ -13,7 +15,9 @@ import { Construct, Stack, StackProps } from '@aws-cdk/core';
 export type StackStage = 'staging' | 'prod';
 
 interface WiFiSwitcherStackProps extends StackProps {
-  readonly api: apigateway.RestApi;
+  readonly api: apigateway.HttpApi;
+  readonly apiStage: apigateway.HttpStage;
+  readonly stage: StackStage;
 }
 
 export class WiFiSwitcherStack extends Stack {
@@ -56,7 +60,10 @@ export class WiFiSwitcherStack extends Stack {
     /**
      * CloudFront
     **/
-    const fqdn = this.node.tryGetContext('FQDN');
+    const hostedZoneId = this.node.tryGetContext('ZONE_ID');
+    const zoneName = this.node.tryGetContext('ZONE_NAME');
+    const domain = `${(props.stage === 'staging') ? 'dev.': ''}${zoneName}`;
+    const fqdn = `game-play.home.${domain}`;
     const certArn = this.node.tryGetContext('CERT_ARN');
     const cert = certArn
       ? certificate.Certificate.fromCertificateArn(this, 'CertificateForTheDomain', certArn)
@@ -72,11 +79,11 @@ export class WiFiSwitcherStack extends Stack {
         },
         {
           customOriginSource: {
-            domainName: `${props.api.restApiId}.execute-api.${this.region}.${this.urlSuffix}`,
+            domainName: `${props.api.apiId}.execute-api.${this.region}.${this.urlSuffix}`,
           },
           behaviors: [
             {
-              pathPattern: `${props.api.deploymentStage.stageName}/*`,
+              pathPattern: `${props.apiStage.stageName}/*`,
               allowedMethods: cloudfront.CloudFrontAllowedMethods.ALL,
               forwardedValues: {
                 headers: ['Content-Type', 'Accept', 'Accept-Encoding', 'Accept-Language', 'Authorization', 'Origin'],
@@ -101,6 +108,28 @@ export class WiFiSwitcherStack extends Stack {
           },
         },
     });
+
+    /**
+     * Route53へAレコードへ登録
+     */
+    if (hostedZoneId && zoneName && fqdn) {
+      const zone = PublicHostedZone.fromHostedZoneAttributes(
+        this,
+        'register-public-host-zone',
+        {
+          hostedZoneId,
+          zoneName,
+        },
+      );
+      new ARecord(this, 'register-a-record', {
+        zone,
+        recordName: fqdn,
+        target: RecordTarget.fromAlias(
+          new CloudFrontTarget(this.distribution),
+        ),
+      });
+    }
+
 
     /**
      * デプロイ

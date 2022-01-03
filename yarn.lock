@@ -40,7 +40,7 @@
     "@aws-cdk/core" "1.137.0"
     constructs "^3.3.69"
 
-"@aws-cdk/aws-apigateway@1.137.0", "@aws-cdk/aws-apigateway@^1.137.0":
+"@aws-cdk/aws-apigateway@1.137.0":
   version "1.137.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigateway/-/aws-apigateway-1.137.0.tgz#e3a160dd9ad9a0ecd3a03e5a4a46d1a547cbfba1"
   integrity sha512-Wk4SiUKZhFhTWxgAsOC4LBqJBGBDf6GrOS9s7Bzawp81qpLVFzbgocB+O1fuYkQrQ31/5UJKhUsMbJG5O0aCZg==
@@ -58,6 +58,45 @@
     "@aws-cdk/aws-stepfunctions" "1.137.0"
     "@aws-cdk/core" "1.137.0"
     "@aws-cdk/cx-api" "1.137.0"
+    constructs "^3.3.69"
+
+"@aws-cdk/aws-apigatewayv2-authorizers@^1.137.0":
+  version "1.137.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-authorizers/-/aws-apigatewayv2-authorizers-1.137.0.tgz#912a681f8606fe55ed77d80414ad6731f1bb5da8"
+  integrity sha512-H81atsmNjn7eZkHW7HgSGh5/8CJzfdqvDzZEwJYBembqZ+cFRzHB+AVZdlKhdza8mmtgSdyR8LCLzs18mO+Fyg==
+  dependencies:
+    "@aws-cdk/aws-apigatewayv2" "1.137.0"
+    "@aws-cdk/aws-cognito" "1.137.0"
+    "@aws-cdk/aws-iam" "1.137.0"
+    "@aws-cdk/aws-lambda" "1.137.0"
+    "@aws-cdk/core" "1.137.0"
+    constructs "^3.3.69"
+
+"@aws-cdk/aws-apigatewayv2-integrations@^1.137.0":
+  version "1.137.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2-integrations/-/aws-apigatewayv2-integrations-1.137.0.tgz#c2f147dfd700234ae757db0a15084fbfa384990c"
+  integrity sha512-wBJuPr/dVOjS95+dmX4KlQfJii+1Aa4srxldFakakNaB+IC03CFjlSyBcCL53D3PTl4B9woTgTyEkkWe7XyXbw==
+  dependencies:
+    "@aws-cdk/aws-apigatewayv2" "1.137.0"
+    "@aws-cdk/aws-ec2" "1.137.0"
+    "@aws-cdk/aws-elasticloadbalancingv2" "1.137.0"
+    "@aws-cdk/aws-iam" "1.137.0"
+    "@aws-cdk/aws-lambda" "1.137.0"
+    "@aws-cdk/aws-servicediscovery" "1.137.0"
+    "@aws-cdk/core" "1.137.0"
+    constructs "^3.3.69"
+
+"@aws-cdk/aws-apigatewayv2@1.137.0", "@aws-cdk/aws-apigatewayv2@^1.137.0":
+  version "1.137.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2/-/aws-apigatewayv2-1.137.0.tgz#46ec1e99e2c1957a5f9c2855fbab81712c874fd2"
+  integrity sha512-MsSv+S1Z8ZUFO7D4Riuwjyyv7YlR3DERHrBYBABivPigsS5NgBPXd3Q63KW1hUmzpm5+3YCHoiUfleBztvWZ7w==
+  dependencies:
+    "@aws-cdk/aws-certificatemanager" "1.137.0"
+    "@aws-cdk/aws-cloudwatch" "1.137.0"
+    "@aws-cdk/aws-ec2" "1.137.0"
+    "@aws-cdk/aws-iam" "1.137.0"
+    "@aws-cdk/aws-s3" "1.137.0"
+    "@aws-cdk/core" "1.137.0"
     constructs "^3.3.69"
 
 "@aws-cdk/aws-applicationautoscaling@1.137.0":
