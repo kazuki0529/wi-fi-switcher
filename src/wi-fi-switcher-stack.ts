@@ -2,12 +2,9 @@ import * as apigateway from '@aws-cdk/aws-apigatewayv2';
 import * as certificate from '@aws-cdk/aws-certificatemanager';
 import * as cloudfront from '@aws-cdk/aws-cloudfront';
 import * as iam from '@aws-cdk/aws-iam';
-// import * as route53 from '@aws-cdk/aws-route53';
-// import * as targets from '@aws-cdk/aws-route53-targets';
 import { ARecord, PublicHostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { CloudFrontTarget } from '@aws-cdk/aws-route53-targets';
 import * as s3 from '@aws-cdk/aws-s3';
-import * as s3deploy from '@aws-cdk/aws-s3-deployment';
 import * as cdk from '@aws-cdk/core';
 import { Construct, Stack, StackProps } from '@aws-cdk/core';
 
@@ -129,16 +126,6 @@ export class WiFiSwitcherStack extends Stack {
         ),
       });
     }
-
-
-    /**
-     * デプロイ
-    **/
-    new s3deploy.BucketDeployment(this, 's3-deploy', {
-      sources: [s3deploy.Source.asset('./web/build/')],
-      destinationBucket: this.webBucket,
-      distribution: this.distribution,
-    });
 
     // CloudFrontのアクセスURLを出力
     new cdk.CfnOutput(this, 'UiCloudFrontUrl', {
