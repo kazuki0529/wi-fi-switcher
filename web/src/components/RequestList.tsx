@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import moment from 'moment';
 
 import { Fade, Alert, AlertTitle, Fab, Button, List, ListItem, ListItemIcon, ListItemText, LinearProgress, Chip, Card, CardContent, CardActions, Typography, Grid, Zoom, Switch, FormGroup, FormControlLabel } from '@mui/material';
 import { useRequest } from '../hooks/Request';
@@ -10,9 +11,20 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import StartIcon from '@mui/icons-material/Start';
 import CheckIcon from '@mui/icons-material/Check';
 import SportsScoreIcon from '@mui/icons-material/SportsScore';
+import { Request as RequestType } from '../type/Request'
 import Request from './Request'
 import AddIcon from '@mui/icons-material/Add';
 
+const calcStartTime = (request: RequestType) => {
+  if (request.status !== 'Request') return '処理済み'
+
+  const diffStart = request.start.diff(moment(), 'minutes');
+  const diffEnd = request.end.diff(moment(), 'minutes');
+  if (diffStart > 0) return `${diffStart} 分後に開始予定`
+  if (diffEnd > 0) return `${-1 * diffStart} 分過ぎています`
+
+  return 'ゲームプレイ予定の時間が過ぎています'
+}
 
 const RequestList: React.FC = () => {
   const request = useRequest();
@@ -50,7 +62,7 @@ const RequestList: React.FC = () => {
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                       <Chip sx={{ mr: 2 }} label={req.status} color={(req.status === 'Request') ? 'error' : (req.status === 'Approve') ? 'success' : 'default'} />
-                      {req.start.format('YYYY年MM月DD日')}
+                      {calcStartTime(req)}
                     </Typography>
                     <List>
                       <ListItem>
