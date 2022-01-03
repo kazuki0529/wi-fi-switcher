@@ -12,8 +12,8 @@ import { StackStage } from './wi-fi-switcher-stack';
 
 
 interface WiFiSwitcherStackApiProps extends StackProps {
-  readonly userPool?:cognito.UserPool;
-  readonly userPoolClient?: cognito.UserPoolClient;
+  readonly userPool:cognito.UserPool;
+  readonly userPoolClient: cognito.UserPoolClient;
   readonly stage: StackStage;
 }
 

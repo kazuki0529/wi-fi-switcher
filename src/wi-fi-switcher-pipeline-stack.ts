@@ -19,6 +19,9 @@ import {
   WiFiSwitcherApiStack,
 } from './wi-fi-switcher-api-stack';
 import {
+  WiFiSwitcherCognitoStack,
+} from './wi-fi-switcher-cognito-stack';
+import {
   StackStage,
   WiFiSwitcherStack,
 } from './wi-fi-switcher-stack';
@@ -37,20 +40,20 @@ class Application extends Stage {
   ) {
     super(scope, id, props);
 
-    // const cognito = new WiFiSwitcherCognitoStack(
-    //   this,
-    //   'wi-fi-switcher-cognito',
-    //   {
-    //     ...props,
-    //   },
-    // );
+    const cognito = new WiFiSwitcherCognitoStack(
+      this,
+      'wi-fi-switcher-cognito',
+      {
+        ...props,
+      },
+    );
     const apiStack = new WiFiSwitcherApiStack(
       this,
       'wi-fi-switcher-api',
       {
         ...props,
-        // userPool: cognito.userPool,
-        // userPoolClient: cognito.userPoolClient,
+        userPool: cognito.userPool,
+        userPoolClient: cognito.userPoolClient,
       },
     );
     const stack = new WiFiSwitcherStack(

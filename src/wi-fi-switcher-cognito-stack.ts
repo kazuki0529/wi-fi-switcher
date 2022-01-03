@@ -8,7 +8,6 @@ interface WiFiSwitcherCognitoStackProps extends StackProps {
   readonly stage: StackStage;
 }
 
-
 export class WiFiSwitcherCognitoStack extends Stack {
   readonly userPool: cognito.UserPool;
   readonly userPoolClient: cognito.UserPoolClient;
@@ -31,12 +30,12 @@ export class WiFiSwitcherCognitoStack extends Stack {
       },
       signInCaseSensitive: false,
       autoVerify: { email: true },
-      signInAliases: { email: true },
+      signInAliases: { username: true },
       accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
     this.userPool.addDomain('domain', {
-      cognitoDomain: { domainPrefix: fqdn.replace('.', '-') },
+      cognitoDomain: { domainPrefix: fqdn.split('.').join('-') },
     });
 
     this.userPoolClient = this.userPool.addClient('client', {
