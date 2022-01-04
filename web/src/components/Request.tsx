@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import moment from 'moment'
 import jaLocale from 'date-fns/locale/ja';
-import { Stack, TextField, Button, DialogProps, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { Stack, TextField, DialogProps, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import { useRequest } from '../hooks/Request';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 interface RequestProps extends DialogProps {
   onClose: () => void;
+  onCreate: () => void;
 }
 
 const Request: React.FC<RequestProps> = (props: RequestProps) => {
@@ -50,15 +52,15 @@ const Request: React.FC<RequestProps> = (props: RequestProps) => {
         </LocalizationProvider>
       </DialogContent>
       <DialogActions>
-        <Button disabled={request.loading} variant='outlined' color='error' onClick={props.onClose}>閉じる</Button>
-        <Button disabled={request.loading} variant='contained' color='success' onClick={() => {
+        <LoadingButton loading={request.loading} variant='outlined' color='error' onClick={props.onClose}>閉じる</LoadingButton>
+        <LoadingButton loading={request.loading} variant='contained' color='success' onClick={() => {
           request.create({
             start: moment(start),
             end: moment(end)
           }).finally(() => {
-            props.onClose();
+            props.onCreate();
           })
-        }}>申請</Button>
+        }}>申請</LoadingButton>
       </DialogActions>
     </Dialog >
   );

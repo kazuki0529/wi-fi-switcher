@@ -44,6 +44,11 @@
       "type": "build"
     },
     {
+      "name": "@aws-amplify/ui-react",
+      "version": "^2.1.5",
+      "type": "runtime"
+    },
+    {
       "name": "@emotion/react",
       "type": "runtime"
     },
@@ -62,6 +67,10 @@
     },
     {
       "name": "@mui/material",
+      "type": "runtime"
+    },
+    {
+      "name": "aws-amplify",
       "type": "runtime"
     },
     {

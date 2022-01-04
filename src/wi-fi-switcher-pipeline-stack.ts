@@ -32,6 +32,9 @@ interface StackStageProps extends StackProps {
 class Application extends Stage {
   public readonly distributionId: CfnOutput;
   public readonly webBucketName: CfnOutput;
+  public readonly userPoolRegion: CfnOutput;
+  public readonly userPoolId: CfnOutput;
+  public readonly userPoolClientId: CfnOutput;
 
   constructor(
     scope: Construct,
@@ -71,6 +74,15 @@ class Application extends Stage {
     });
     this.webBucketName = new CfnOutput(stack, 'WEB_BUCKET_NAME', {
       value: stack.webBucket.bucketName,
+    });
+    this.userPoolRegion = new CfnOutput(stack, 'USER_POOL_REGION', {
+      value: cognito.userPool.stack.region,
+    });
+    this.userPoolId = new CfnOutput(stack, 'USER_POOL_ID', {
+      value: cognito.userPool.userPoolId,
+    });
+    this.userPoolClientId = new CfnOutput(stack, 'USER_POOL_CLIENT_ID', {
+      value: cognito.userPoolClient.userPoolClientId,
     });
   }
 }
@@ -170,6 +182,9 @@ export class WiFiSwitcherPipelineStack extends Stack {
       useOutputs: {
         DISTRIBUTION_ID: pipeline.stackOutput(stageApp.distributionId),
         WEB_BUCKET_NAME: pipeline.stackOutput(stageApp.webBucketName),
+        REACT_APP_AWS_COGNITO_REGION: pipeline.stackOutput(stageApp.userPoolRegion),
+        REACT_APP_AWS_USER_POOLS_ID: pipeline.stackOutput(stageApp.userPoolId),
+        REACT_APP_AWS_USER_POOLS_CLIENT_ID: pipeline.stackOutput(stageApp.userPoolClientId),
       },
     }));
 
@@ -181,6 +196,9 @@ export class WiFiSwitcherPipelineStack extends Stack {
       useOutputs: {
         DISTRIBUTION_ID: pipeline.stackOutput(prodApp.distributionId),
         WEB_BUCKET_NAME: pipeline.stackOutput(prodApp.webBucketName),
+        REACT_APP_AWS_COGNITO_REGION: pipeline.stackOutput(prodApp.userPoolRegion),
+        REACT_APP_AWS_USER_POOLS_ID: pipeline.stackOutput(prodApp.userPoolId),
+        REACT_APP_AWS_USER_POOLS_CLIENT_ID: pipeline.stackOutput(prodApp.userPoolClientId),
       },
     }));
   }

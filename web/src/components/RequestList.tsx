@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import moment from 'moment';
 
-import { Fade, Alert, AlertTitle, Fab, Button, List, ListItem, ListItemIcon, ListItemText, LinearProgress, Chip, Card, CardContent, CardActions, Typography, Grid, Zoom, Switch, FormGroup, FormControlLabel } from '@mui/material';
+import { Fade, Alert, AlertTitle, Fab, List, ListItem, ListItemIcon, ListItemText, LinearProgress, Chip, Card, CardContent, CardActions, Typography, Grid, Zoom, Switch, FormGroup, FormControlLabel } from '@mui/material';
 import { useRequest } from '../hooks/Request';
 import { useRequestList } from '../hooks/RequestList';
 import { TransitionGroup } from 'react-transition-group';
@@ -14,6 +14,8 @@ import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import { Request as RequestType } from '../type/Request'
 import Request from './Request'
 import AddIcon from '@mui/icons-material/Add';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { useLogonUser } from '../hooks/LoginUser'
 
 const calcStartTime = (request: RequestType) => {
   if (request.status !== 'Request') return '処理済み'
@@ -30,6 +32,7 @@ const RequestList: React.FC = () => {
   const request = useRequest();
   const requestList = useRequestList();
 
+  const { userInfo } = useLogonUser();
   const [showForm, setShowForm] = useState<boolean>(false)
   const [showAll, setShowAll] = useState<boolean>(false);
 
@@ -89,26 +92,28 @@ const RequestList: React.FC = () => {
                       </ListItem>
                     </List>
                   </CardContent>
-                  <CardActions>
-                    <Button variant="outlined" color='success' disabled={req.status !== 'Request' || request.loading} startIcon={<CheckIcon />}
-                      onClick={() => {
-                        request.approve(req.id).finally(() => {
-                          requestList.reload();
-                        });
-                      }}
-                    >
-                      承認
-                    </Button>
-                    <Button variant="outlined" color='error' disabled={req.status !== 'Request' || request.loading} startIcon={<CancelIcon />}
-                      onClick={() => {
-                        request.reject(req.id).finally(() => {
-                          requestList.reload();
-                        });
-                      }}
-                    >
-                      却下
-                    </Button>
-                  </CardActions>
+                  {userInfo?.attributes?.profile === 'APPROVER' ?
+                    <CardActions>
+                      <LoadingButton variant="outlined" color='success' loading={request.loading} disabled={req.status !== 'Request'} startIcon={<CheckIcon />}
+                        onClick={() => {
+                          request.approve(req.id).finally(() => {
+                            requestList.reload();
+                          });
+                        }}
+                      >
+                        承認
+                      </LoadingButton>
+                      <LoadingButton variant="outlined" color='error' loading={request.loading} disabled={req.status !== 'Request'} startIcon={<CancelIcon />}
+                        onClick={() => {
+                          request.reject(req.id).finally(() => {
+                            requestList.reload();
+                          });
+                        }}
+                      >
+                        却下
+                      </LoadingButton>
+                    </CardActions>
+                    : <div />}
                 </Card>
               </Zoom>
             </TransitionGroup>
@@ -126,7 +131,7 @@ const RequestList: React.FC = () => {
       }}>
         <AddIcon />
       </Fab>
-      <Request open={showForm} onClose={() => { setShowForm(false); requestList.reload(); }} />
+      <Request open={showForm} onClose={() => { setShowForm(false); }} onCreate={() => { setShowForm(false); requestList.reload(); }} />
     </div>
   );
 };

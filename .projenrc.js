@@ -81,6 +81,8 @@ const reactProject = new web.ReactTypeScriptProject({
     '@emotion/react',
     '@emotion/styled',
     '@mui/icons-material',
+    'aws-amplify',
+    '@aws-amplify/ui-react@^2.1.5',
   ],
 });
 
