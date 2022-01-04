@@ -4,10 +4,12 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
         busybox-static wget libgconf-2-4 libnss3 libxcb1 fonts-ipafont gnupg gnupg1 gnupg2
 
-COPY switcher /usr/local/src
+COPY switcher/requirements.txt /usr/local/src/requirements.txt
 RUN pip install \
   --disable-pip-version-check --no-cache-dir \
   -r /usr/local/src/requirements.txt
+
+COPY switcher /usr/local/src
 
 # Chrome and ChromeWebDriver
 RUN if [ "$(dpkg --print-architecture)" = 'arm64' ]; then ( \
