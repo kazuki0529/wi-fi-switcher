@@ -1,4 +1,5 @@
 import * as apigw from '@aws-cdk/aws-apigatewayv2';
+import * as authz from '@aws-cdk/aws-apigatewayv2-authorizers';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations';
 import * as cognito from '@aws-cdk/aws-cognito';
 import * as dynamo from '@aws-cdk/aws-dynamodb';
@@ -20,13 +21,16 @@ interface WiFiSwitcherStackApiProps extends StackProps {
 export class WiFiSwitcherApiStack extends Stack {
   public readonly table: dynamo.Table;
   public readonly api: apigw.HttpApi;
-  public readonly apiStage: apigw.HttpStage;
 
   constructor(
     scope: Construct, id: string,
     props: WiFiSwitcherStackApiProps,
   ) {
     super(scope, id, props);
+
+    const zoneName = this.node.tryGetContext('ZONE_NAME');
+    const domain = `${(props.stage === 'staging') ? 'dev.': ''}${zoneName}`;
+    const fqdn = `game-play.home.${domain}`;
 
     // データ格納領域作成
     this.table =new dynamo.Table(this, 'data', {
@@ -78,14 +82,23 @@ export class WiFiSwitcherApiStack extends Stack {
     });
     this.table.grantReadWriteData(requests);
 
-
     this.api = new apigw.HttpApi(this, 'game-play', {
-      createDefaultStage: false,
-    });
-    this.apiStage = new apigw.HttpStage(this, 'api-stage', {
-      httpApi: this.api,
-      stageName: 'api',
-      autoDeploy: true,
+      defaultAuthorizer: new authz.HttpUserPoolAuthorizer('authorizer', props.userPool, {
+        userPoolRegion: this.region,
+        userPoolClients: [props.userPoolClient],
+      }),
+      corsPreflight: {
+        allowOrigins: (props.stage === 'staging') ? ['*'] : [`https://${fqdn}`],
+        allowMethods: [apigw.CorsHttpMethod.ANY],
+        allowHeaders: [
+          'content-type',
+          'authorization',
+          'x-amz-date',
+          'x-api-key',
+          'x-amz-security-token',
+          'x-amz-user-agent',
+        ],
+      },
     });
 
     this.api.addRoutes({

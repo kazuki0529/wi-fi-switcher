@@ -129,9 +129,9 @@ export default function RequestRepository(): IRequestRepository {
         start: data.start ? data.start.toISOString() : undefined,
         end: data.end ? data.end.toISOString(): undefined,
       };
-      const updateKeys = Object.keys(data).filter(
+      const updateKeys = Object.keys(item).filter(
         (key) =>
-          data[key as keyof Partial<Omit<Request, 'id'>>] && !['id', 'createdAt', 'updatedAt'].includes(key),
+          item[key as keyof Partial<Omit<Request, 'id'>>] && !['id', 'createdAt', 'updatedAt'].includes(key),
       );
       const params: dynamodblib.UpdateCommandInput = {
         TableName: TABLE_NAME,

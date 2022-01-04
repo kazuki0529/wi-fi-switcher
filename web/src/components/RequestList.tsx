@@ -131,7 +131,7 @@ const RequestList: React.FC = () => {
       }}>
         <AddIcon />
       </Fab>
-      <Request open={showForm} onClose={() => { setShowForm(false); }} onCreate={() => { setShowForm(false); requestList.reload(); }} />
+      <Request open={showForm} onClose={(created) => { if (created) requestList.reload(); setShowForm(false); }} />
     </div>
   );
 };

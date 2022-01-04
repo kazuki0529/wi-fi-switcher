@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Request, Status } from '../type/Request'
 import moment from 'moment'
 import axios from 'axios'
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 export interface RequestState {
   readonly data?: Request
@@ -21,6 +22,7 @@ export function useRequest(): RequestState {
   const [data, setData] = useState<Request | undefined>(undefined)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | undefined>(undefined)
+  const {user} = useAuthenticator()
 
   const updateStatus = async (id: string, status: Status) => {
     setError(undefined)
@@ -28,8 +30,13 @@ export function useRequest(): RequestState {
 
     try {
       const response = await axios.put(
-        `${API_ENDPOINT}/api/v1/requests/${id}`,
-        { status: status }
+        `${API_ENDPOINT}/v1/requests/${id}`,
+        { status: status },
+        {
+          headers: {
+            'Authorization' : user.getSignInUserSession()?.getIdToken().getJwtToken() ?? ''
+          }
+        }
       )
       setData({
         ...response.data,
@@ -60,12 +67,17 @@ export function useRequest(): RequestState {
 
     try {
       const response = await axios.post(
-        `${API_ENDPOINT}/api/v1/requests`,
+        `${API_ENDPOINT}/v1/requests`,
         {
           ...data,
           status: 'Request',
           start: data.start.toISOString(),
           end: data.end.toISOString(),
+        },
+        {
+          headers: {
+            'Authorization' : user.getSignInUserSession()?.getIdToken().getJwtToken() ?? ''
+          }
         }
       )
       setData({

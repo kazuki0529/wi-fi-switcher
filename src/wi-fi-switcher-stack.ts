@@ -13,7 +13,6 @@ export type StackStage = 'staging' | 'prod';
 
 interface WiFiSwitcherStackProps extends StackProps {
   readonly api: apigateway.HttpApi;
-  readonly apiStage: apigateway.HttpStage;
   readonly stage: StackStage;
 }
 
@@ -73,24 +72,6 @@ export class WiFiSwitcherStack extends Stack {
             originAccessIdentity: oai,
           },
           behaviors: [{ isDefaultBehavior: true }],
-        },
-        {
-          customOriginSource: {
-            domainName: `${props.api.apiId}.execute-api.${this.region}.${this.urlSuffix}`,
-          },
-          behaviors: [
-            {
-              pathPattern: `${props.apiStage.stageName}/*`,
-              allowedMethods: cloudfront.CloudFrontAllowedMethods.ALL,
-              forwardedValues: {
-                headers: ['Content-Type', 'Accept', 'Accept-Encoding', 'Accept-Language', 'Authorization', 'Origin'],
-                queryString: true,
-              },
-              defaultTtl: cdk.Duration.seconds(0),
-              maxTtl: cdk.Duration.seconds(0),
-              minTtl: cdk.Duration.seconds(0),
-            },
-          ],
         },
       ],
       geoRestriction: cloudfront.GeoRestriction.allowlist('JP'),

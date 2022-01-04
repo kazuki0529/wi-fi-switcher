@@ -9,8 +9,7 @@ import { useRequest } from '../hooks/Request';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 interface RequestProps extends DialogProps {
-  onClose: () => void;
-  onCreate: () => void;
+  onClose: (created: boolean) => void;
 }
 
 const Request: React.FC<RequestProps> = (props: RequestProps) => {
@@ -35,6 +34,7 @@ const Request: React.FC<RequestProps> = (props: RequestProps) => {
             <DateTimePicker
               renderInput={(props) => <TextField {...props} />}
               label="開始日時"
+              mask='____/__/__ __:__'
               value={start}
               onChange={(value) => {
                 setStart(value as string);
@@ -44,6 +44,7 @@ const Request: React.FC<RequestProps> = (props: RequestProps) => {
               renderInput={(props) => <TextField {...props} />}
               label="終了日時"
               value={end}
+              mask='____/__/__ __:__'
               onChange={(value) => {
                 setEnd(value as string);
               }}
@@ -52,13 +53,13 @@ const Request: React.FC<RequestProps> = (props: RequestProps) => {
         </LocalizationProvider>
       </DialogContent>
       <DialogActions>
-        <LoadingButton loading={request.loading} variant='outlined' color='error' onClick={props.onClose}>閉じる</LoadingButton>
+        <LoadingButton loading={request.loading} variant='outlined' color='error' onClick={() => props.onClose(false)}>閉じる</LoadingButton>
         <LoadingButton loading={request.loading} variant='contained' color='success' onClick={() => {
           request.create({
             start: moment(start),
             end: moment(end)
           }).finally(() => {
-            props.onCreate();
+            props.onClose(true);
           })
         }}>申請</LoadingButton>
       </DialogActions>
