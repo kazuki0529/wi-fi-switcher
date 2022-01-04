@@ -23,7 +23,7 @@ touch "${status_file}" \
 cd $(dirname $0)
 
 declare -r schedule=$(mktemp)
-wget -O "${schedule}" "${API_END_POINT}/api/v1/requests/approve/now"
+python ./get_requests.py > "${schedule}"
 
 while IFS=, read start end status; do
   [[ "${start}" == "start" ]] && continue     # ヘッダ行判定
