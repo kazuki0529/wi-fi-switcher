@@ -129,7 +129,7 @@ export class WiFiSwitcherPipelineStack extends Stack {
       synthCommand: 'npx cdk synth -c "CERT_ARN=${CERT_ARN}" -c "ZONE_ID=${ZONE_ID}" -c "ZONE_NAME=${ZONE_NAME}"',
     };
 
-    const pipeline = new CdkPipeline(this, 'pipeline-staging', {
+    const pipeline = new CdkPipeline(this, 'pipeline', {
       pipelineName: 'Wi-Fi-SwitcherPipeline',
       cloudAssemblyArtifact,
       sourceAction,
