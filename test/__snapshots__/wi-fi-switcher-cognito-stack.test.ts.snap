@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot 1`] = `
+Object {
+  "Resources": Object {
+    "userPoolDC9497E0": Object {
+      "DeletionPolicy": "Delete",
+      "Properties": Object {
+        "AccountRecoverySetting": Object {
+          "RecoveryMechanisms": Array [
+            Object {
+              "Name": "verified_email",
+              "Priority": 1,
+            },
+          ],
+        },
+        "AdminCreateUserConfig": Object {
+          "AllowAdminCreateUserOnly": true,
+        },
+        "AutoVerifiedAttributes": Array [
+          "email",
+        ],
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "Schema": Array [
+          Object {
+            "Mutable": true,
+            "Name": "email",
+            "Required": true,
+          },
+          Object {
+            "Mutable": true,
+            "Name": "phone_number",
+            "Required": false,
+          },
+        ],
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UsernameConfiguration": Object {
+          "CaseSensitive": false,
+        },
+        "VerificationMessageTemplate": Object {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}",
+        },
+      },
+      "Type": "AWS::Cognito::UserPool",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "userPoolclient992D31C6": Object {
+      "Properties": Object {
+        "AllowedOAuthFlows": Array [
+          "code",
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": Array [
+          "email",
+          "openid",
+          "profile",
+        ],
+        "CallbackURLs": Array [
+          "https://game-play.home.dev.ZONE-NAME/",
+        ],
+        "LogoutURLs": Array [
+          "https://game-play.home.dev.ZONE-NAME/",
+        ],
+        "SupportedIdentityProviders": Array [
+          "COGNITO",
+        ],
+        "UserPoolId": Object {
+          "Ref": "userPoolDC9497E0",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolClient",
+    },
+    "userPooldomainF1095B33": Object {
+      "Properties": Object {
+        "Domain": "game-play-home-dev-zone-name",
+        "UserPoolId": Object {
+          "Ref": "userPoolDC9497E0",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolDomain",
+    },
+  },
+}
+`;

@@ -1,4 +1,4 @@
-import { APIGatewayEvent } from 'aws-lambda/trigger/api-gateway-proxy';
+import { APIGatewayProxyEventV2 } from 'aws-lambda';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import { Request } from '../src/domain/model/Request';
@@ -6,64 +6,36 @@ import RequestUseCase from '../src/usecase/RequestUseCase';
 import { handler } from '../src/wi-fi-switcher-api-stack.requests';
 jest.mock('../src/usecase/RequestUseCase');
 
-const eventBase: APIGatewayEvent = {
-  resource: '',
-  path: '',
-  httpMethod: '',
+const eventBase: APIGatewayProxyEventV2 = {
+  version: '1',
+  routeKey: '',
+  rawPath: '',
+  rawQueryString: '',
   headers: {},
-  multiValueHeaders: {},
-  queryStringParameters: null,
-  multiValueQueryStringParameters: null,
-  pathParameters: {},
-  stageVariables: null,
   requestContext: {
-    authorizer: null,
-    protocol: '',
-    requestTimeEpoch: 0,
-    path: '',
     accountId: '',
-    resourceId: '',
-    stage: '',
-    domainPrefix: '',
-    requestId: '',
-    identity: {
-      principalOrgId: null,
-      cognitoIdentityPoolId: null,
-      cognitoIdentityId: null,
-      apiKey: '',
-      cognitoAuthenticationType: null,
-      userArn: '',
-      apiKeyId: '',
-      userAgent: '',
-      accountId: '',
-      caller: '',
-      sourceIp: '',
-      accessKey: '',
-      cognitoAuthenticationProvider: null,
-      user: '',
-      clientCert: {
-        clientCertPem: '',
-        issuerDN: '',
-        serialNumber: '',
-        subjectDN: '',
-        validity: {
-          notAfter: '',
-          notBefore: '',
-        },
-      },
-    },
-    domainName: '',
-    resourcePath: '',
-    httpMethod: '',
-    extendedRequestId: '',
     apiId: '',
+    domainName: '',
+    domainPrefix: '',
+    http: {
+      method: '',
+      path: '',
+      protocol: '',
+      sourceIp: '',
+      userAgent: '',
+    },
+    requestId: '',
+    routeKey: '',
+    stage: '',
+    time: '',
+    timeEpoch: 0,
   },
-  body: null,
+  body: '',
   isBase64Encoded: false,
 };
 
 describe('requests for Lambda functions', () => {
-  describe('POST /requests', () => {
+  describe('POST /v1/requests', () => {
     it('should call a function that creates a request to the UseCase layer', async () => {
       //Setup
       const mock = jest.fn().mockResolvedValue({});
@@ -76,9 +48,7 @@ describe('requests for Lambda functions', () => {
       };
 
       const event = {
-        httpMethod: 'POST',
-        resource: '/v1/requests',
-        path: '/v1/requests',
+        routeKey: 'POST /v1/requests',
         body: JSON.stringify(data),
       };
 
@@ -107,9 +77,7 @@ describe('requests for Lambda functions', () => {
 
 
       const event = {
-        httpMethod: 'POST',
-        resource: '/v1/requests',
-        path: '/v1/requests',
+        routeKey: 'POST /v1/requests',
         body: JSON.stringify({
           status: 'Approve',
         }),
@@ -136,7 +104,7 @@ describe('requests for Lambda functions', () => {
 
   });
 
-  describe('GET /requests', () => {
+  describe('GET /v1/requests', () => {
     it('should call a function that retrieves the list of requests to the UseCase layer', async () => {
       //Setup
       const mock = jest.fn().mockResolvedValue([]);
@@ -145,9 +113,7 @@ describe('requests for Lambda functions', () => {
       }));
 
       const event = {
-        httpMethod: 'GET',
-        resource: '/v1/requests',
-        path: '/v1/requests',
+        routeKey: 'GET /v1/requests',
       };
 
       // When
@@ -183,9 +149,7 @@ describe('requests for Lambda functions', () => {
       }));
 
       const event = {
-        httpMethod: 'GET',
-        resource: '/v1/requests',
-        path: '/v1/requests',
+        routeKey: 'GET /v1/requests',
       };
 
       // When
@@ -209,7 +173,7 @@ describe('requests for Lambda functions', () => {
 
   });
 
-  describe('PUT /requests/{requestId}', () => {
+  describe('PUT /v1/requests/{requestId}', () => {
     it('should call a function that updates the request to the UseCase layer', async () => {
       //Setup
       const mock = jest.fn().mockResolvedValue({});
@@ -222,9 +186,7 @@ describe('requests for Lambda functions', () => {
       };
 
       const event = {
-        httpMethod: 'PUT',
-        resource: '/v1/requests/{requestId}',
-        path: '/v1/requests/{requestId}',
+        routeKey: 'PUT /v1/requests/{requestId}',
         pathParameters: {
           requestId: uuidv4(),
         },
@@ -257,9 +219,7 @@ describe('requests for Lambda functions', () => {
 
 
       const event = {
-        httpMethod: 'PUT',
-        resource: '/v1/requests/{requestId}',
-        path: '/v1/requests/{requestId}',
+        routeKey: 'PUT /v1/requests/{requestId}',
         pathParameters: {
           requestId: uuidv4(),
         },

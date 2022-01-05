@@ -35,7 +35,7 @@ export class WiFiSwitcherCognitoStack extends Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
     this.userPool.addDomain('domain', {
-      cognitoDomain: { domainPrefix: fqdn.split('.').join('-') },
+      cognitoDomain: { domainPrefix: fqdn.toLowerCase().split('.').join('-') },
     });
 
     this.userPoolClient = this.userPool.addClient('client', {
