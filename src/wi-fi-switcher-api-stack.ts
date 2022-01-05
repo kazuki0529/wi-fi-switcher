@@ -1,24 +1,36 @@
-import * as apigateway from '@aws-cdk/aws-apigateway';
+import * as apigw from '@aws-cdk/aws-apigatewayv2';
+import * as authz from '@aws-cdk/aws-apigatewayv2-authorizers';
+import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations';
+import * as cognito from '@aws-cdk/aws-cognito';
 import * as dynamo from '@aws-cdk/aws-dynamodb';
 import * as iam from '@aws-cdk/aws-iam';;
 import * as lambda from '@aws-cdk/aws-lambda';
 import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
 import * as logs from '@aws-cdk/aws-logs';
 import * as cdk from '@aws-cdk/core';
-
 import { Construct, RemovalPolicy, Stack, StackProps } from '@aws-cdk/core';
+import { StackStage } from './wi-fi-switcher-stack';
 
-export type StackStage = 'staging' | 'prod';
+
+interface WiFiSwitcherStackApiProps extends StackProps {
+  readonly userPool:cognito.UserPool;
+  readonly userPoolClient: cognito.UserPoolClient;
+  readonly stage: StackStage;
+}
 
 export class WiFiSwitcherApiStack extends Stack {
   public readonly table: dynamo.Table;
-  public readonly api: apigateway.RestApi;
+  public readonly api: apigw.HttpApi;
 
   constructor(
     scope: Construct, id: string,
-    props?: StackProps,
+    props: WiFiSwitcherStackApiProps,
   ) {
     super(scope, id, props);
+
+    const zoneName = this.node.tryGetContext('ZONE_NAME');
+    const domain = `${(props.stage === 'staging') ? 'dev.': ''}${zoneName}`;
+    const fqdn = `game-play.home.${domain}`;
 
     // データ格納領域作成
     this.table =new dynamo.Table(this, 'data', {
@@ -70,31 +82,34 @@ export class WiFiSwitcherApiStack extends Stack {
     });
     this.table.grantReadWriteData(requests);
 
-    this.api = new apigateway.RestApi(this, 'game-play', {
-      policy: new iam.PolicyDocument({
-        statements: [
-          new iam.PolicyStatement({
-            principals: [new iam.AnyPrincipal()],
-            effect: iam.Effect.ALLOW,
-            actions: ['execute-api:Invoke'],
-            resources: ['execute-api:/api/*'],
-          }),
-        ],
+    this.api = new apigw.HttpApi(this, 'game-play', {
+      defaultAuthorizer: new authz.HttpUserPoolAuthorizer('authorizer', props.userPool, {
+        userPoolRegion: this.region,
+        userPoolClients: [props.userPoolClient],
       }),
-      deployOptions: {
-        tracingEnabled: true,
-        stageName: 'api',
-        loggingLevel: apigateway.MethodLoggingLevel.INFO,
+      corsPreflight: {
+        allowOrigins: (props.stage === 'staging') ? ['*'] : [`https://${fqdn}`],
+        allowMethods: [apigw.CorsHttpMethod.ANY],
+        allowHeaders: [
+          'content-type',
+          'authorization',
+          'x-amz-date',
+          'x-api-key',
+          'x-amz-security-token',
+          'x-amz-user-agent',
+        ],
       },
     });
-    const baseApi = this.api.root.addResource('v1');
-    const requestsIntegration = new apigateway.LambdaIntegration(requests);
-    const requestsApi = baseApi.addResource('requests');
-    requestsApi.addMethod('POST', requestsIntegration);
-    requestsApi.addMethod('GET', requestsIntegration);
 
-    requestsApi.addResource('{requestId}').addMethod('PUT', requestsIntegration);
-
-    new cdk.CfnOutput(this, 'ApiUrl', { value: this.api.url });
+    this.api.addRoutes({
+      methods: [apigw.HttpMethod.GET, apigw.HttpMethod.POST],
+      path: '/v1/requests',
+      integration: new HttpLambdaIntegration('api-request-integration', requests),
+    });
+    this.api.addRoutes({
+      methods: [apigw.HttpMethod.PUT],
+      path: '/v1/requests/{requestId}',
+      integration: new HttpLambdaIntegration('api-request-integration', requests),
+    });
   }
 }

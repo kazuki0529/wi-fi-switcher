@@ -9,7 +9,10 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '@aws-cdk/aws-dynamodb',
     '@aws-cdk/aws-lambda',
     '@aws-cdk/aws-lambda-nodejs',
-    '@aws-cdk/aws-apigateway',
+    '@aws-cdk/aws-apigatewayv2',
+    '@aws-cdk/aws-apigatewayv2-integrations',
+    '@aws-cdk/aws-apigatewayv2-authorizers',
+    '@aws-cdk/aws-cognito',
     '@aws-cdk/aws-s3',
     '@aws-cdk/aws-s3-deployment',
     '@aws-cdk/aws-cloudfront',
@@ -78,6 +81,8 @@ const reactProject = new web.ReactTypeScriptProject({
     '@emotion/react',
     '@emotion/styled',
     '@mui/icons-material',
+    'aws-amplify',
+    '@aws-amplify/ui-react@^2.1.5',
   ],
 });
 

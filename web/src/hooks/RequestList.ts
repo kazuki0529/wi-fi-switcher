@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Request } from '../type/Request'
 import moment from 'moment'
 import axios from 'axios'
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 export interface RequestList {
   readonly data: Array<Request>
@@ -16,6 +17,8 @@ export function useRequestList(): RequestList {
   const [data, setData] = useState<Array<Request>>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | undefined>(undefined)
+  const { user } = useAuthenticator()
+  
 
   const getAll = async () => {
     setError(undefined)
@@ -23,7 +26,13 @@ export function useRequestList(): RequestList {
 
     try {
       const response = await axios.get(
-        `${API_ENDPOINT}/api/v1/requests`
+        `${API_ENDPOINT}/v1/requests`,
+        {
+          headers: {
+            'Authorization' : user.getSignInUserSession()?.getIdToken().getJwtToken() ?? ''
+          }
+        }
+
       )
       setData(
         response.data

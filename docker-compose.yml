@@ -6,6 +6,10 @@ services:
       context: .
       dockerfile: ./docker/switcher/Dockerfile 
     environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID?error}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY?error}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION?error}
+      TABLE_NAME: ${TABLE_NAME?error}
       ROUTER_USER_NAME: ${ROUTER_USER_NAME:?error}
       ROUTER_PASSWORD: ${ROUTER_PASSWORD:?error}
       TARGET_ROUTER: ${TARGET_ROUTER?error}
@@ -14,26 +18,6 @@ services:
     volumes:
       - ./data/latest_logs:/usr/local/src/latest_logs
       - ./data/archived_logs:/usr/local/src/archived_logs
-    logging:
-      driver: 'json-file'
-      options:
-        max-size: 10m
-    restart: always
-  web:
-    build:
-      context: .
-      dockerfile: ./docker/web/Dockerfile 
-    environment:
-      APPROVE_CODE: ${APPROVE_CODE?error}
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID?error}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY?error}
-      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION?error}
-      TZ: ${TZ:-Asia/Tokyo}
-      TABLE_NAME: ${TABLE_NAME?error}
-    ports:
-      - 5000:5000
-    volumes:
-      - ./data:/usr/local/data
     logging:
       driver: 'json-file'
       options:

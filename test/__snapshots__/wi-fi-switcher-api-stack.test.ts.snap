@@ -2,73 +2,7 @@
 
 exports[`Snapshot 1`] = `
 Object {
-  "Outputs": Object {
-    "ApiUrl": Object {
-      "Value": Object {
-        "Fn::Join": Array [
-          "",
-          Array [
-            "https://",
-            Object {
-              "Ref": "gameplayCFF713D3",
-            },
-            ".execute-api.",
-            Object {
-              "Ref": "AWS::Region",
-            },
-            ".",
-            Object {
-              "Ref": "AWS::URLSuffix",
-            },
-            "/",
-            Object {
-              "Ref": "gameplayDeploymentStageapiE6CF920D",
-            },
-            "/",
-          ],
-        ],
-      },
-    },
-    "gameplayEndpoint614F499E": Object {
-      "Value": Object {
-        "Fn::Join": Array [
-          "",
-          Array [
-            "https://",
-            Object {
-              "Ref": "gameplayCFF713D3",
-            },
-            ".execute-api.",
-            Object {
-              "Ref": "AWS::Region",
-            },
-            ".",
-            Object {
-              "Ref": "AWS::URLSuffix",
-            },
-            "/",
-            Object {
-              "Ref": "gameplayDeploymentStageapiE6CF920D",
-            },
-            "/",
-          ],
-        ],
-      },
-    },
-  },
   "Parameters": Object {
-    "AssetParameters1a139739e5b757e81595e4498abb244f07217a0ce9d3824ba31fbcad1c3e7a44ArtifactHashB1B60069": Object {
-      "Description": "Artifact hash for asset \\"1a139739e5b757e81595e4498abb244f07217a0ce9d3824ba31fbcad1c3e7a44\\"",
-      "Type": "String",
-    },
-    "AssetParameters1a139739e5b757e81595e4498abb244f07217a0ce9d3824ba31fbcad1c3e7a44S3Bucket8AF559CC": Object {
-      "Description": "S3 bucket for asset \\"1a139739e5b757e81595e4498abb244f07217a0ce9d3824ba31fbcad1c3e7a44\\"",
-      "Type": "String",
-    },
-    "AssetParameters1a139739e5b757e81595e4498abb244f07217a0ce9d3824ba31fbcad1c3e7a44S3VersionKey7AD5EDC5": Object {
-      "Description": "S3 key for asset version \\"1a139739e5b757e81595e4498abb244f07217a0ce9d3824ba31fbcad1c3e7a44\\"",
-      "Type": "String",
-    },
     "AssetParametersc13434f8f1aa2ea30fa577b2feb208a41368b11787b752e10bfc71fe8eb919d5ArtifactHashE9AE13B7": Object {
       "Description": "Artifact hash for asset \\"c13434f8f1aa2ea30fa577b2feb208a41368b11787b752e10bfc71fe8eb919d5\\"",
       "Type": "String",
@@ -79,6 +13,18 @@ Object {
     },
     "AssetParametersc13434f8f1aa2ea30fa577b2feb208a41368b11787b752e10bfc71fe8eb919d5S3VersionKey50C3CFF0": Object {
       "Description": "S3 key for asset version \\"c13434f8f1aa2ea30fa577b2feb208a41368b11787b752e10bfc71fe8eb919d5\\"",
+      "Type": "String",
+    },
+    "AssetParameterscf97ce808f6b44949a1352368a0a33efcaac000023f1a2f30148da4d60f6522aArtifactHash024A316E": Object {
+      "Description": "Artifact hash for asset \\"cf97ce808f6b44949a1352368a0a33efcaac000023f1a2f30148da4d60f6522a\\"",
+      "Type": "String",
+    },
+    "AssetParameterscf97ce808f6b44949a1352368a0a33efcaac000023f1a2f30148da4d60f6522aS3BucketE182323F": Object {
+      "Description": "S3 bucket for asset \\"cf97ce808f6b44949a1352368a0a33efcaac000023f1a2f30148da4d60f6522a\\"",
+      "Type": "String",
+    },
+    "AssetParameterscf97ce808f6b44949a1352368a0a33efcaac000023f1a2f30148da4d60f6522aS3VersionKey18C084FB": Object {
+      "Description": "S3 key for asset version \\"cf97ce808f6b44949a1352368a0a33efcaac000023f1a2f30148da4d60f6522a\\"",
       "Type": "String",
     },
   },
@@ -247,503 +193,251 @@ Object {
       "Type": "AWS::DynamoDB::Table",
       "UpdateReplacePolicy": "Delete",
     },
-    "gameplayAccount6A9FD56E": Object {
-      "DependsOn": Array [
-        "gameplayCFF713D3",
-      ],
-      "Properties": Object {
-        "CloudWatchRoleArn": Object {
-          "Fn::GetAtt": Array [
-            "gameplayCloudWatchRole3CD68CC0",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::ApiGateway::Account",
-    },
     "gameplayCFF713D3": Object {
       "Properties": Object {
+        "CorsConfiguration": Object {
+          "AllowHeaders": Array [
+            "content-type",
+            "authorization",
+            "x-amz-date",
+            "x-api-key",
+            "x-amz-security-token",
+            "x-amz-user-agent",
+          ],
+          "AllowMethods": Array [
+            "*",
+          ],
+          "AllowOrigins": Array [
+            "*",
+          ],
+        },
         "Name": "game-play",
-        "Policy": Object {
-          "Statement": Array [
-            Object {
-              "Action": "execute-api:Invoke",
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": "*",
+        "ProtocolType": "HTTP",
+      },
+      "Type": "AWS::ApiGatewayV2::Api",
+    },
+    "gameplayDefaultStageE4871BAA": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "gameplayCFF713D3",
+        },
+        "AutoDeploy": true,
+        "StageName": "$default",
+      },
+      "Type": "AWS::ApiGatewayV2::Stage",
+    },
+    "gameplayGETv1requestsE1DFF4F4": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "gameplayCFF713D3",
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": Object {
+          "Ref": "gameplayauthorizerB5BCBBEB",
+        },
+        "RouteKey": "GET /v1/requests",
+        "Target": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "integrations/",
+              Object {
+                "Ref": "gameplayGETv1requestsapirequestintegration8AB6D9A4",
               },
-              "Resource": "execute-api:/api/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "gameplayGETv1requestsapirequestintegration8AB6D9A4": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "gameplayCFF713D3",
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": Object {
+          "Fn::GetAtt": Array [
+            "requestsC775BB57",
+            "Arn",
+          ],
+        },
+        "PayloadFormatVersion": "2.0",
+      },
+      "Type": "AWS::ApiGatewayV2::Integration",
+    },
+    "gameplayGETv1requestsapirequestintegrationPermission7AAA04F4": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "requestsC775BB57",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "gameplayCFF713D3",
+              },
+              "/*/*/v1/requests",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "gameplayPOSTv1requests744637FD": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "gameplayCFF713D3",
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": Object {
+          "Ref": "gameplayauthorizerB5BCBBEB",
+        },
+        "RouteKey": "POST /v1/requests",
+        "Target": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "integrations/",
+              Object {
+                "Ref": "gameplayGETv1requestsapirequestintegration8AB6D9A4",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "gameplayPUTv1requestsrequestId932050D1": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "gameplayCFF713D3",
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": Object {
+          "Ref": "gameplayauthorizerB5BCBBEB",
+        },
+        "RouteKey": "PUT /v1/requests/{requestId}",
+        "Target": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "integrations/",
+              Object {
+                "Ref": "gameplayPUTv1requestsrequestIdapirequestintegrationF1852542",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "gameplayPUTv1requestsrequestIdapirequestintegrationF1852542": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "gameplayCFF713D3",
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": Object {
+          "Fn::GetAtt": Array [
+            "requestsC775BB57",
+            "Arn",
+          ],
+        },
+        "PayloadFormatVersion": "2.0",
+      },
+      "Type": "AWS::ApiGatewayV2::Integration",
+    },
+    "gameplayPUTv1requestsrequestIdapirequestintegrationPermission9177BDC7": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "requestsC775BB57",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::Join": Array [
+            "",
+            Array [
+              "arn:",
+              Object {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              Object {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              Object {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              Object {
+                "Ref": "gameplayCFF713D3",
+              },
+              "/*/*/v1/requests/{requestId}",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "gameplayauthorizerB5BCBBEB": Object {
+      "Properties": Object {
+        "ApiId": Object {
+          "Ref": "gameplayCFF713D3",
+        },
+        "AuthorizerType": "JWT",
+        "IdentitySource": Array [
+          "$request.header.Authorization",
+        ],
+        "JwtConfiguration": Object {
+          "Audience": Array [
+            Object {
+              "Fn::ImportValue": "cognito:ExportsOutputRefuserPoolclient992D31C6EE176468",
             },
           ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::ApiGateway::RestApi",
-    },
-    "gameplayCloudWatchRole3CD68CC0": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "apigateway.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
+          "Issuer": Object {
             "Fn::Join": Array [
               "",
               Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
-              ],
-            ],
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "gameplayDeployment07985458a2d59f3fb24c60e2d2f44612dfa77386": Object {
-      "DependsOn": Array [
-        "gameplayv1requestsrequestIdPUT2A3654A7",
-        "gameplayv1requestsrequestIdE02902C3",
-        "gameplayv1requestsGET6DA73213",
-        "gameplayv1requestsPOST2A4681B6",
-        "gameplayv1requestsF499FC16",
-        "gameplayv10D29AA75",
-      ],
-      "Properties": Object {
-        "Description": "Automatically created by the RestApi construct",
-        "RestApiId": Object {
-          "Ref": "gameplayCFF713D3",
-        },
-      },
-      "Type": "AWS::ApiGateway::Deployment",
-    },
-    "gameplayDeploymentStageapiE6CF920D": Object {
-      "DependsOn": Array [
-        "gameplayAccount6A9FD56E",
-      ],
-      "Properties": Object {
-        "DeploymentId": Object {
-          "Ref": "gameplayDeployment07985458a2d59f3fb24c60e2d2f44612dfa77386",
-        },
-        "MethodSettings": Array [
-          Object {
-            "DataTraceEnabled": false,
-            "HttpMethod": "*",
-            "LoggingLevel": "INFO",
-            "ResourcePath": "/*",
-          },
-        ],
-        "RestApiId": Object {
-          "Ref": "gameplayCFF713D3",
-        },
-        "StageName": "api",
-        "TracingEnabled": true,
-      },
-      "Type": "AWS::ApiGateway::Stage",
-    },
-    "gameplayv10D29AA75": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Fn::GetAtt": Array [
-            "gameplayCFF713D3",
-            "RootResourceId",
-          ],
-        },
-        "PathPart": "v1",
-        "RestApiId": Object {
-          "Ref": "gameplayCFF713D3",
-        },
-      },
-      "Type": "AWS::ApiGateway::Resource",
-    },
-    "gameplayv1requestsF499FC16": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Ref": "gameplayv10D29AA75",
-        },
-        "PathPart": "requests",
-        "RestApiId": Object {
-          "Ref": "gameplayCFF713D3",
-        },
-      },
-      "Type": "AWS::ApiGateway::Resource",
-    },
-    "gameplayv1requestsGET6DA73213": Object {
-      "Properties": Object {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "GET",
-        "Integration": Object {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:",
+                "https://cognito-idp.",
                 Object {
                   "Ref": "AWS::Region",
                 },
-                ":lambda:path/2015-03-31/functions/",
+                ".amazonaws.com/",
                 Object {
-                  "Fn::GetAtt": Array [
-                    "requestsC775BB57",
-                    "Arn",
-                  ],
+                  "Fn::ImportValue": "cognito:ExportsOutputRefuserPoolDC9497E0A5AAB3BA",
                 },
-                "/invocations",
               ],
             ],
           },
         },
-        "ResourceId": Object {
-          "Ref": "gameplayv1requestsF499FC16",
-        },
-        "RestApiId": Object {
-          "Ref": "gameplayCFF713D3",
-        },
+        "Name": "authorizer",
       },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "gameplayv1requestsGETApiPermissionTesttestgameplayE3B31E76GETv1requests2206B94B": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "requestsC775BB57",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              Object {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              Object {
-                "Ref": "gameplayCFF713D3",
-              },
-              "/test-invoke-stage/GET/v1/requests",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "gameplayv1requestsGETApiPermissiontestgameplayE3B31E76GETv1requests2E75110D": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "requestsC775BB57",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              Object {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              Object {
-                "Ref": "gameplayCFF713D3",
-              },
-              "/",
-              Object {
-                "Ref": "gameplayDeploymentStageapiE6CF920D",
-              },
-              "/GET/v1/requests",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "gameplayv1requestsPOST2A4681B6": Object {
-      "Properties": Object {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "POST",
-        "Integration": Object {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:",
-                Object {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
-                Object {
-                  "Fn::GetAtt": Array [
-                    "requestsC775BB57",
-                    "Arn",
-                  ],
-                },
-                "/invocations",
-              ],
-            ],
-          },
-        },
-        "ResourceId": Object {
-          "Ref": "gameplayv1requestsF499FC16",
-        },
-        "RestApiId": Object {
-          "Ref": "gameplayCFF713D3",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "gameplayv1requestsPOSTApiPermissionTesttestgameplayE3B31E76POSTv1requests8068908B": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "requestsC775BB57",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              Object {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              Object {
-                "Ref": "gameplayCFF713D3",
-              },
-              "/test-invoke-stage/POST/v1/requests",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "gameplayv1requestsPOSTApiPermissiontestgameplayE3B31E76POSTv1requestsA8E84DF2": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "requestsC775BB57",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              Object {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              Object {
-                "Ref": "gameplayCFF713D3",
-              },
-              "/",
-              Object {
-                "Ref": "gameplayDeploymentStageapiE6CF920D",
-              },
-              "/POST/v1/requests",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "gameplayv1requestsrequestIdE02902C3": Object {
-      "Properties": Object {
-        "ParentId": Object {
-          "Ref": "gameplayv1requestsF499FC16",
-        },
-        "PathPart": "{requestId}",
-        "RestApiId": Object {
-          "Ref": "gameplayCFF713D3",
-        },
-      },
-      "Type": "AWS::ApiGateway::Resource",
-    },
-    "gameplayv1requestsrequestIdPUT2A3654A7": Object {
-      "Properties": Object {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "PUT",
-        "Integration": Object {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:",
-                Object {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
-                Object {
-                  "Fn::GetAtt": Array [
-                    "requestsC775BB57",
-                    "Arn",
-                  ],
-                },
-                "/invocations",
-              ],
-            ],
-          },
-        },
-        "ResourceId": Object {
-          "Ref": "gameplayv1requestsrequestIdE02902C3",
-        },
-        "RestApiId": Object {
-          "Ref": "gameplayCFF713D3",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "gameplayv1requestsrequestIdPUTApiPermissionTesttestgameplayE3B31E76PUTv1requestsrequestIdCD333572": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "requestsC775BB57",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              Object {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              Object {
-                "Ref": "gameplayCFF713D3",
-              },
-              "/test-invoke-stage/PUT/v1/requests/*",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "gameplayv1requestsrequestIdPUTApiPermissiontestgameplayE3B31E76PUTv1requestsrequestId47A65E6C": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "requestsC775BB57",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "arn:",
-              Object {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              Object {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              Object {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              Object {
-                "Ref": "gameplayCFF713D3",
-              },
-              "/",
-              Object {
-                "Ref": "gameplayDeploymentStageapiE6CF920D",
-              },
-              "/PUT/v1/requests/*",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::ApiGatewayV2::Authorizer",
     },
     "generateBatchLambdaRole0660E91E": Object {
       "Properties": Object {
@@ -846,7 +540,7 @@ Object {
       "Properties": Object {
         "Code": Object {
           "S3Bucket": Object {
-            "Ref": "AssetParameters1a139739e5b757e81595e4498abb244f07217a0ce9d3824ba31fbcad1c3e7a44S3Bucket8AF559CC",
+            "Ref": "AssetParameterscf97ce808f6b44949a1352368a0a33efcaac000023f1a2f30148da4d60f6522aS3BucketE182323F",
           },
           "S3Key": Object {
             "Fn::Join": Array [
@@ -859,7 +553,7 @@ Object {
                       "Fn::Split": Array [
                         "||",
                         Object {
-                          "Ref": "AssetParameters1a139739e5b757e81595e4498abb244f07217a0ce9d3824ba31fbcad1c3e7a44S3VersionKey7AD5EDC5",
+                          "Ref": "AssetParameterscf97ce808f6b44949a1352368a0a33efcaac000023f1a2f30148da4d60f6522aS3VersionKey18C084FB",
                         },
                       ],
                     },
@@ -872,7 +566,7 @@ Object {
                       "Fn::Split": Array [
                         "||",
                         Object {
-                          "Ref": "AssetParameters1a139739e5b757e81595e4498abb244f07217a0ce9d3824ba31fbcad1c3e7a44S3VersionKey7AD5EDC5",
+                          "Ref": "AssetParameterscf97ce808f6b44949a1352368a0a33efcaac000023f1a2f30148da4d60f6522aS3VersionKey18C084FB",
                         },
                       ],
                     },
