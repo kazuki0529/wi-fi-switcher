@@ -66,6 +66,7 @@ class Application extends Stage {
       {
         ...props,
         api: apiStack.api,
+        table: apiStack.table,
       },
     );
 

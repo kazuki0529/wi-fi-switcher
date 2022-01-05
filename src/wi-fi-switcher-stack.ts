@@ -1,6 +1,7 @@
 import * as apigateway from '@aws-cdk/aws-apigatewayv2';
 import * as certificate from '@aws-cdk/aws-certificatemanager';
 import * as cloudfront from '@aws-cdk/aws-cloudfront';
+import * as dynamo from '@aws-cdk/aws-dynamodb';
 import * as iam from '@aws-cdk/aws-iam';
 import { ARecord, PublicHostedZone, RecordTarget } from '@aws-cdk/aws-route53';
 import { CloudFrontTarget } from '@aws-cdk/aws-route53-targets';
@@ -14,6 +15,7 @@ export type StackStage = 'staging' | 'prod';
 interface WiFiSwitcherStackProps extends StackProps {
   readonly api: apigateway.HttpApi;
   readonly stage: StackStage;
+  readonly table: dynamo.Table;
 }
 
 export class WiFiSwitcherStack extends Stack {
@@ -108,6 +110,12 @@ export class WiFiSwitcherStack extends Stack {
         ),
       });
     }
+
+    /**
+     * Switcher用のIAMロール作成
+     */
+    const switcher = new iam.User(this, 'switcher-user', {});
+    props.table.grantReadData(switcher);
 
     // CloudFrontのアクセスURLを出力
     new cdk.CfnOutput(this, 'UiCloudFrontUrl', {
