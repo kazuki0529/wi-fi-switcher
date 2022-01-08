@@ -45,7 +45,7 @@
     "jest-junit": "^13",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^12",
-    "projen": "^0.47.13",
+    "projen": "^0.50.12",
     "ts-jest": "^27.1.2",
     "ts-node": "^9",
     "typescript": "^4.5.4"
@@ -76,7 +76,7 @@
     "@aws-sdk/client-dynamodb": "^3.45.0",
     "@aws-sdk/lib-dynamodb": "^3.45.0",
     "@types/aws-lambda": "^8.10.89",
-    "@types/uuid": "*",
+    "@types/uuid": "^8.3.4",
     "aws-xray-sdk": "^3.3.4",
     "constructs": "^3.2.27",
     "moment": "^2.29.1",
@@ -87,8 +87,8 @@
   "version": "0.0.0",
   "jest": {
     "testMatch": [
-      "**/__tests__/**/*.ts?(x)",
-      "**/?(*.)+(spec|test).ts?(x)"
+      "<rootDir>/src/**/__tests__/**/*.ts?(x)",
+      "<rootDir>/(test|src)/**/?(*.)+(spec|test).ts?(x)"
     ],
     "clearMocks": true,
     "collectCoverage": true,
