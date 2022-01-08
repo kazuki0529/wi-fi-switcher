@@ -3,6 +3,7 @@ const { awscdk, web } = require('projen');
 const project = new awscdk.AwsCdkTypeScriptApp({
   cdkVersion: '1.137.0',
   defaultReleaseBranch: 'main',
+  projenTokenSecret: 'GITHUB_TOKEN',
   name: 'wi-fi-switcher',
   repository: 'https://github.com/kazuki0529/wi-fi-switcher.git',
   cdkDependencies: [
