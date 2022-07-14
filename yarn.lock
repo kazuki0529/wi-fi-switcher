@@ -2781,10 +2781,10 @@ atomic-batcher@^1.0.2:
   resolved "https://registry.yarnpkg.com/atomic-batcher/-/atomic-batcher-1.0.2.tgz#d16901d10ccec59516c197b9ccd8930689b813b4"
   integrity sha512-EFGCRj4kLX1dHv1cDzTk+xbjBFj1GnJDpui52YmEcxxHHEWjYyT6l51U7n6WQ28osZH4S9gSybxe56Vm7vB61Q==
 
-aws-cdk@^1.163.2:
-  version "1.163.2"
-  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-1.163.2.tgz#99c592ea209985c69cc353408ba5f773beaf2ceb"
-  integrity sha512-ZRy1733Q9latRYKj322YUktv3YSZvdNXIy4DMHGo+mGG/c8gm/dALaYIZ8ScsDnRBzuv2XYYqSmDbebqr9gcJg==
+aws-cdk@^2.31.2:
+  version "2.31.2"
+  resolved "https://registry.yarnpkg.com/aws-cdk/-/aws-cdk-2.31.2.tgz#37cc1a7d252cc1ede0dc8562f2b7da0ae1b3657a"
+  integrity sha512-pDnRUb9/2mD1MyvO2mccyzhLVJWiV7G5wvU0Mu0VOWCsCa0FBJPjN8H1wA9XZEcErqzHIRlpoCmtGr2Ie3Jd6A==
   optionalDependencies:
     fsevents "2.3.2"
 
