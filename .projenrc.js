@@ -1,7 +1,7 @@
 const { awscdk, web } = require('projen');
 
 const project = new awscdk.AwsCdkTypeScriptApp({
-  cdkVersion: '1.137.0',
+  cdkVersion: '1.163.2',
   defaultReleaseBranch: 'main',
   name: 'wi-fi-switcher',
   repository: 'https://github.com/kazuki0529/wi-fi-switcher.git',
