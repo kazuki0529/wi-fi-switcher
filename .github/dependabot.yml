@@ -5,11 +5,15 @@
 
 version: 2
 updates:
-  - package-ecosystem: "yarn"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "daily"
-  - package-ecosystem: "yarn"
-    directory: "/web"
+      interval: 'daily'
+  - package-ecosystem: 'npm'
+    directory: '/web'
     schedule:
-      interval: "daily"
+      interval: 'daily'
+  - package-ecosystem: 'pip'
+    directory: '/switcher'
+    schedule:
+      interval: 'daily'
