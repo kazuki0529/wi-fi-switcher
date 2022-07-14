@@ -35,7 +35,7 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "aws-cdk": "^1.163.2",
-    "aws-sdk-client-mock": "^0.6.2",
+    "aws-sdk-client-mock": "^1.0.0",
     "esbuild": "^0.14.49",
     "eslint": "^8",
     "eslint-import-resolver-node": "^0.3.6",
