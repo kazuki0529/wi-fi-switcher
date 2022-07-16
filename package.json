@@ -42,7 +42,7 @@
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.26.0",
     "jest": "^27.5.1",
-    "jest-junit": "^13",
+    "jest-junit": "^14",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^12",
     "projen": "^0.50.12",
