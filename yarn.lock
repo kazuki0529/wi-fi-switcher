@@ -1203,12 +1203,12 @@
   dependencies:
     tslib "^2.3.1"
 
-"@aws-sdk/lib-dynamodb@^3.128.0":
-  version "3.128.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.128.0.tgz#2faaa209dc8d0bb1f9dbc5b2063c501bd1ac0c55"
-  integrity sha512-Gewo6HrzWEE7C6/rSLo/rOfj+17PE3vg8fkqQ/+4iUwAbv6+Kdz/Lo/T31RROwD7XCiSYxmt/xnxNtrokB9h9g==
+"@aws-sdk/lib-dynamodb@^3.131.0":
+  version "3.131.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/lib-dynamodb/-/lib-dynamodb-3.131.0.tgz#521688aa891d4754bd032747c0d1d29cb7b40eda"
+  integrity sha512-1MavY4S3RafFHkdCQmZCUhUBMN+J7Ir0/M6cEqUtm6wPXKtgnsGF9R4gGZFKMzBgWwBVjlXAhI8ACWiHOFfvvQ==
   dependencies:
-    "@aws-sdk/util-dynamodb" "3.128.0"
+    "@aws-sdk/util-dynamodb" "3.131.0"
     tslib "^2.3.1"
 
 "@aws-sdk/middleware-content-length@3.127.0":
@@ -1483,10 +1483,10 @@
     "@aws-sdk/types" "3.127.0"
     tslib "^2.3.1"
 
-"@aws-sdk/util-dynamodb@3.128.0":
-  version "3.128.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/util-dynamodb/-/util-dynamodb-3.128.0.tgz#5870214e85de7d7afa3a22cbd1a8c657a07a6f21"
-  integrity sha512-+RYkMlbWWCUY0YayqHLNadkVATZudDd27xAoHQRRVb33E1st3zMPyrQYVDoxX6B0IeP19+jVcL+LJtZW/uNSqA==
+"@aws-sdk/util-dynamodb@3.131.0":
+  version "3.131.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/util-dynamodb/-/util-dynamodb-3.131.0.tgz#e8005374cacad06cbc6bd033ac427fd8bbf08c66"
+  integrity sha512-oSdXrUIq00vS7SoeXTfYCD2YkVMt98sFNZIsqIirAnXfOCXMIQ7ganeBKvBJxGHdHiXeCeUfAjuTLiYNBKAnxQ==
   dependencies:
     tslib "^2.3.1"
 
@@ -2788,10 +2788,10 @@ aws-cdk@^1.163.2:
   optionalDependencies:
     fsevents "2.3.2"
 
-aws-sdk-client-mock@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/aws-sdk-client-mock/-/aws-sdk-client-mock-0.6.2.tgz#2880d7a7a7e9fcaaf7abdfc01a0f6f22551bc654"
-  integrity sha512-0kH1cyfqGogp69vJitzVducx9q691vGOwg7wEG+DUegGlepjaeskp6YG4SJI0y5Vwh3vi+fP27YQTcWllv4GlQ==
+aws-sdk-client-mock@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk-client-mock/-/aws-sdk-client-mock-1.0.0.tgz#d52c70562ae0ff44ac07a4ef4611ff420681abff"
+  integrity sha512-qd7TJXI1nplTXNh8NdIEwFyHTnNRdUcGDUAEmWW55j9dZg6AGB9zgkzgu9yWCEkAWnpxRIc48ajE8H5FFeioVw==
   dependencies:
     "@types/sinon" "10.0.10"
     sinon "^11.1.1"
