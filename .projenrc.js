@@ -54,7 +54,11 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '@types/uuid',
     'uuid',
   ],
-  devDeps: ['esbuild', 'aws-sdk-client-mock'],
+  devDeps: [
+    'esbuild',
+    'aws-sdk-client-mock',
+    'typescript@4.6.4',
+  ],
   devContainer: true,
   // description: undefined,      /* The description is just a string that helps people understand the purpose of the package. */
   // packageName: undefined,      /* The "name" in package.json. */
