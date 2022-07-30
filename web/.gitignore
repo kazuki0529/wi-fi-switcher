@@ -36,5 +36,5 @@ jspm_packages/
 !/src/
 /lib
 /dist/
+!/.eslintrc.json
 /build/
-!/react-app-env.d.ts
