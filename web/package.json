@@ -25,6 +25,7 @@
     "@types/node": "^14",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
+    "@types/react-transition-group": "^4.4.5",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "eslint": "^8",
@@ -50,6 +51,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "^5",
+    "react-transition-group": "^4.4.3",
     "type-guards": "^0.15.0",
     "web-vitals": "^2.1.2"
   },

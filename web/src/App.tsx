@@ -1,12 +1,12 @@
-import { Container, AppBar, Toolbar, Typography, Box, IconButton } from '@mui/material'
+import { Authenticator } from '@aws-amplify/ui-react';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
-import RequestList from './components/RequestList'
+import { Container, AppBar, Toolbar, Typography, Box, IconButton } from '@mui/material';
 import Amplify from 'aws-amplify';
-import { Authenticator } from '@aws-amplify/ui-react';
 import { awsConfig } from './awsConfig';
+import RequestList from './components/RequestList';
 import '@aws-amplify/ui-react/styles.css';
-import './App.css'
+import './App.css';
 
 Amplify.configure(awsConfig);
 

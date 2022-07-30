@@ -30,6 +30,10 @@
       "type": "build"
     },
     {
+      "name": "@types/react-transition-group",
+      "type": "build"
+    },
+    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"
@@ -127,6 +131,10 @@
     {
       "name": "react-scripts",
       "version": "^5",
+      "type": "runtime"
+    },
+    {
+      "name": "react-transition-group",
       "type": "runtime"
     },
     {
