@@ -80,7 +80,6 @@
     },
     {
       "name": "@aws-amplify/ui-react",
-      "version": "^2.1.5",
       "type": "runtime"
     },
     {
@@ -97,7 +96,6 @@
     },
     {
       "name": "@mui/lab",
-      "version": "5.0.0-alpha.62",
       "type": "runtime"
     },
     {
