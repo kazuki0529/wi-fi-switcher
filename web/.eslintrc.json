@@ -170,11 +170,9 @@
     "no-duplicate-imports": [
       "error"
     ],
-    "no-shadow": [
-      "off"
-    ],
+    "no-shadow": "off",
     "@typescript-eslint/no-shadow": [
-      "error"
+      "warn"
     ],
     "key-spacing": [
       "error"
@@ -183,7 +181,7 @@
       "error"
     ],
     "@typescript-eslint/no-floating-promises": [
-      "error"
+      "warn"
     ],
     "no-return-await": [
       "off"

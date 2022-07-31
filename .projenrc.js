@@ -1,3 +1,4 @@
+const { GitHubTrigger } = require('@aws-cdk/aws-codepipeline-actions');
 const { awscdk, web } = require('projen');
 
 const project = new awscdk.AwsCdkTypeScriptApp({
@@ -54,10 +55,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '@types/uuid',
     'uuid',
   ],
-  devDeps: [
-    'esbuild',
-    'aws-sdk-client-mock',
-  ],
+  devDeps: ['esbuild', 'aws-sdk-client-mock'],
   typescriptVersion: '4.6.4',
   devContainer: true,
   // description: undefined,      /* The description is just a string that helps people understand the purpose of the package. */
@@ -80,14 +78,21 @@ const reactProject = new web.ReactTypeScriptProject({
     'axios',
     'type-guards',
     '@mui/material',
-    '@mui/lab@5.0.0-alpha.62',
+    '@mui/lab',
     'date-fns',
     '@emotion/react',
     '@emotion/styled',
     '@mui/icons-material',
     'aws-amplify',
-    '@aws-amplify/ui-react@^2.1.5',
+    '@aws-amplify/ui-react',
+    'react-transition-group',
   ],
+  devDeps: ['@types/react-transition-group'],
+});
+reactProject.eslint.addRules({
+  'no-shadow': 'off',
+  '@typescript-eslint/no-shadow': ['warn'],
+  '@typescript-eslint/no-floating-promises': ['warn'],
 });
 
 reactProject.synth();
