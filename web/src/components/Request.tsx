@@ -32,20 +32,20 @@ const Request: React.FC<RequestProps> = (props: RequestProps) => {
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={jaLocale}>
           <Stack spacing={2}>
             <DateTimePicker
-              renderInput={(props) => <TextField {...props} />}
+              renderInput={() => <TextField />}
               label="開始日時"
               mask='____/__/__ __:__'
               value={start}
-              onChange={(value) => {
+              onChange={(value: string) => {
                 setStart(value as string);
               }}
             />
             <DateTimePicker
-              renderInput={(props) => <TextField {...props} />}
+              renderInput={() => <TextField />}
               label="終了日時"
               value={end}
               mask='____/__/__ __:__'
-              onChange={(value) => {
+              onChange={(value: string) => {
                 setEnd(value as string);
               }}
             />
