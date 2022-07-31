@@ -30,6 +30,10 @@
       "type": "build"
     },
     {
+      "name": "@types/react-transition-group",
+      "type": "build"
+    },
+    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"
@@ -76,7 +80,6 @@
     },
     {
       "name": "@aws-amplify/ui-react",
-      "version": "^2.1.5",
       "type": "runtime"
     },
     {
@@ -93,7 +96,6 @@
     },
     {
       "name": "@mui/lab",
-      "version": "5.0.0-alpha.62",
       "type": "runtime"
     },
     {
@@ -127,6 +129,10 @@
     {
       "name": "react-scripts",
       "version": "^5",
+      "type": "runtime"
+    },
+    {
+      "name": "react-transition-group",
       "type": "runtime"
     },
     {

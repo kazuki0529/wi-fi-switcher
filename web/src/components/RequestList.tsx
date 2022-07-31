@@ -1,46 +1,45 @@
-import React from 'react';
-import { useState } from 'react';
-import moment from 'moment';
-
-import { Fade, Alert, AlertTitle, Fab, List, ListItem, ListItemIcon, ListItemText, LinearProgress, Chip, Card, CardContent, CardActions, Typography, Grid, Zoom, Switch, FormGroup, FormControlLabel } from '@mui/material';
-import { useRequest } from '../hooks/Request';
-import { useRequestList } from '../hooks/RequestList';
-import { TransitionGroup } from 'react-transition-group';
-import TimerIcon from '@mui/icons-material/Timer';
+import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Cancel';
-import StartIcon from '@mui/icons-material/Start';
 import CheckIcon from '@mui/icons-material/Check';
 import SportsScoreIcon from '@mui/icons-material/SportsScore';
-import { Request as RequestType } from '../type/Request'
-import Request from './Request'
-import AddIcon from '@mui/icons-material/Add';
+import StartIcon from '@mui/icons-material/Start';
+import TimerIcon from '@mui/icons-material/Timer';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useLogonUser } from '../hooks/LoginUser'
+import { Fade, Alert, AlertTitle, Fab, List, ListItem, ListItemIcon, ListItemText, LinearProgress, Chip, Card, CardContent, CardActions, Typography, Grid, Zoom, Switch, FormGroup, FormControlLabel } from '@mui/material';
+import moment from 'moment';
+import React from 'react';
+
+import { TransitionGroup } from 'react-transition-group';
+import { useLogonUser } from '../hooks/LoginUser';
+import { useRequest } from '../hooks/Request';
+import { useRequestList } from '../hooks/RequestList';
+import { Request as RequestType } from '../type/Request';
+import Request from './Request';
 
 const calcStartTime = (request: RequestType) => {
-  if (request.status !== 'Request') return '処理済み'
+  if (request.status !== 'Request') return '処理済み';
 
   const diffStart = request.start.diff(moment(), 'minutes');
   const diffEnd = request.end.diff(moment(), 'minutes');
-  if (diffStart > 0) return `${diffStart} 分後に開始予定`
-  if (diffEnd > 0) return `${-1 * diffStart} 分過ぎています`
+  if (diffStart > 0) return `${diffStart} 分後に開始予定`;
+  if (diffEnd > 0) return `${-1 * diffStart} 分過ぎています`;
 
-  return 'ゲームプレイ予定の時間が過ぎています'
-}
+  return 'ゲームプレイ予定の時間が過ぎています';
+};
 
 const RequestList: React.FC = () => {
   const request = useRequest();
   const requestList = useRequestList();
 
   const { userInfo } = useLogonUser();
-  const [showForm, setShowForm] = useState<boolean>(false)
-  const [showAll, setShowAll] = useState<boolean>(false);
+  const [showForm, setShowForm] = React.useState<boolean>(false);
+  const [showAll, setShowAll] = React.useState<boolean>(false);
 
   return (
     <div>
       <FormGroup sx={{ mt: 2 }}>
         <FormControlLabel
-          control={<Switch checked={showAll} onChange={(event) => { setShowAll(event.target.checked) }} />}
+          control={<Switch checked={showAll} onChange={(event) => { setShowAll(event.target.checked); }} />}
           label="すべて表示" />
       </FormGroup>
       <Fade in={requestList.loading || request.loading}>
@@ -79,7 +78,7 @@ const RequestList: React.FC = () => {
                           <StartIcon />
                         </ListItemIcon>
                         <ListItemText
-                          primary={req.start.local().format("YYYY-MM-DD HH:mm:ss")}
+                          primary={req.start.local().format('YYYY-MM-DD HH:mm:ss')}
                         />
                       </ListItem>
                       <ListItem>
@@ -87,7 +86,7 @@ const RequestList: React.FC = () => {
                           <SportsScoreIcon />
                         </ListItemIcon>
                         <ListItemText
-                          primary={req.end.local().format("YYYY-MM-DD HH:mm:ss")}
+                          primary={req.end.local().format('YYYY-MM-DD HH:mm:ss')}
                         />
                       </ListItem>
                     </List>
