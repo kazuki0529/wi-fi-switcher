@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import moment from 'moment'
-import jaLocale from 'date-fns/locale/ja';
-import { Stack, TextField, DialogProps, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
-import { useRequest } from '../hooks/Request';
 import LoadingButton from '@mui/lab/LoadingButton';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { Stack, TextField, DialogProps, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import jaLocale from 'date-fns/locale/ja';
+import moment from 'moment';
+import React, { useState } from 'react';
+import { useRequest } from '../hooks/Request';
 
 interface RequestProps extends DialogProps {
   onClose: (created: boolean) => void;
@@ -14,9 +14,9 @@ interface RequestProps extends DialogProps {
 
 const Request: React.FC<RequestProps> = (props: RequestProps) => {
   const [start, setStart] = useState<string>(
-    moment().add(30, 'minutes').local().format('YYYY/MM/DD HH:mm')
-  )
-  const [end, setEnd] = useState<string>(moment().add(120 + 30, 'minutes').local().format('YYYY/MM/DD HH:mm'))
+    moment().add(30, 'minutes').local().format('YYYY/MM/DD HH:mm'),
+  );
+  const [end, setEnd] = useState<string>(moment().add(120 + 30, 'minutes').local().format('YYYY/MM/DD HH:mm'));
   const request = useRequest();
 
   return (
@@ -32,20 +32,20 @@ const Request: React.FC<RequestProps> = (props: RequestProps) => {
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={jaLocale}>
           <Stack spacing={2}>
             <DateTimePicker
-              renderInput={(props) => <TextField {...props} />}
+              renderInput={() => <TextField />}
               label="開始日時"
               mask='____/__/__ __:__'
               value={start}
-              onChange={(value) => {
+              onChange={(value: string) => {
                 setStart(value as string);
               }}
             />
             <DateTimePicker
-              renderInput={(props) => <TextField {...props} />}
+              renderInput={() => <TextField />}
               label="終了日時"
               value={end}
               mask='____/__/__ __:__'
-              onChange={(value) => {
+              onChange={(value: string) => {
                 setEnd(value as string);
               }}
             />
@@ -57,10 +57,10 @@ const Request: React.FC<RequestProps> = (props: RequestProps) => {
         <LoadingButton loading={request.loading} variant='contained' color='success' onClick={() => {
           request.create({
             start: moment(start),
-            end: moment(end)
+            end: moment(end),
           }).finally(() => {
             props.onClose(true);
-          })
+          });
         }}>申請</LoadingButton>
       </DialogActions>
     </Dialog >
