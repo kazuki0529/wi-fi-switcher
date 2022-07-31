@@ -1,39 +1,39 @@
-import { useEffect, useState } from 'react'
-import { Request } from '../type/Request'
-import moment from 'moment'
-import axios from 'axios'
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import axios from 'axios';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { Request } from '../type/Request';
 
 export interface RequestList {
-  readonly data: Array<Request>
-  readonly loading: boolean
-  readonly error: string | undefined
-  reload: () => Promise<void>
+  readonly data: Array<Request>;
+  readonly loading: boolean;
+  readonly error: string | undefined;
+  reload: () => Promise<void>;
 }
 
-const API_ENDPOINT = process.env.REACT_APP_API_URL ?? ''
+const API_ENDPOINT = process.env.REACT_APP_API_URL ?? '';
 
 export function useRequestList(): RequestList {
-  const [data, setData] = useState<Array<Request>>([])
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | undefined>(undefined)
-  const { user } = useAuthenticator()
-  
+  const [data, setData] = useState<Array<Request>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>(undefined);
+  const { user } = useAuthenticator();
+
 
   const getAll = async () => {
-    setError(undefined)
-    setLoading(true)
+    setError(undefined);
+    setLoading(true);
 
     try {
       const response = await axios.get(
         `${API_ENDPOINT}/v1/requests`,
         {
           headers: {
-            'Authorization' : user.getSignInUserSession()?.getIdToken().getJwtToken() ?? ''
-          }
-        }
+            Authorization: user.getSignInUserSession()?.getIdToken().getJwtToken() ?? '',
+          },
+        },
 
-      )
+      );
       setData(
         response.data
           .map(
@@ -44,29 +44,29 @@ export function useRequestList(): RequestList {
                 end: moment(e.end),
                 createdAt: moment(e.createdAt),
                 updatedAt: moment(e.updatedAt),
-              } as Request)
+              } as Request),
           )
-          .sort((curr: Request, prev: Request) => prev.start.diff(curr.start))
-      )
+          .sort((curr: Request, prev: Request) => prev.start.diff(curr.start)),
+      );
       // } catch (e) {
       //   setError(e.message)
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    getAll()
-  }, [])
+    getAll();
+  }, []);
 
   const reload = async () => {
-    await getAll()
-  }
+    await getAll();
+  };
 
   return {
     data,
     loading,
     error,
     reload,
-  }
+  };
 }
