@@ -32,7 +32,7 @@ const Request: React.FC<RequestProps> = (props: RequestProps) => {
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={jaLocale}>
           <Stack spacing={2}>
             <DateTimePicker
-              renderInput={() => <TextField />}
+              renderInput={(props: any) => <TextField {...props} />}
               label="開始日時"
               mask='____/__/__ __:__'
               value={start}
@@ -41,7 +41,7 @@ const Request: React.FC<RequestProps> = (props: RequestProps) => {
               }}
             />
             <DateTimePicker
-              renderInput={() => <TextField />}
+              renderInput={(props: any) => <TextField {...props} />}
               label="終了日時"
               value={end}
               mask='____/__/__ __:__'
