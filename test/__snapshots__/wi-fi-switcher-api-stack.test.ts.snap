@@ -3,18 +3,6 @@
 exports[`Snapshot 1`] = `
 Object {
   "Parameters": Object {
-    "AssetParameters2edbf9313c7b2f979355a21f487ea1e7a9086cbb37b053357be8b257cc160164ArtifactHashCFD0AD42": Object {
-      "Description": "Artifact hash for asset \\"2edbf9313c7b2f979355a21f487ea1e7a9086cbb37b053357be8b257cc160164\\"",
-      "Type": "String",
-    },
-    "AssetParameters2edbf9313c7b2f979355a21f487ea1e7a9086cbb37b053357be8b257cc160164S3Bucket24EDC087": Object {
-      "Description": "S3 bucket for asset \\"2edbf9313c7b2f979355a21f487ea1e7a9086cbb37b053357be8b257cc160164\\"",
-      "Type": "String",
-    },
-    "AssetParameters2edbf9313c7b2f979355a21f487ea1e7a9086cbb37b053357be8b257cc160164S3VersionKey17A0EB47": Object {
-      "Description": "S3 key for asset version \\"2edbf9313c7b2f979355a21f487ea1e7a9086cbb37b053357be8b257cc160164\\"",
-      "Type": "String",
-    },
     "AssetParametersc8dfcc3db7a767ebc6f9417372a8fee940927c659f793315834a6784dab3d686ArtifactHashB7ECE5F1": Object {
       "Description": "Artifact hash for asset \\"c8dfcc3db7a767ebc6f9417372a8fee940927c659f793315834a6784dab3d686\\"",
       "Type": "String",
@@ -25,6 +13,18 @@ Object {
     },
     "AssetParametersc8dfcc3db7a767ebc6f9417372a8fee940927c659f793315834a6784dab3d686S3VersionKey8D940F9A": Object {
       "Description": "S3 key for asset version \\"c8dfcc3db7a767ebc6f9417372a8fee940927c659f793315834a6784dab3d686\\"",
+      "Type": "String",
+    },
+    "AssetParameterse90f48fafdc3969b9a692328ccfa04c0481285c1dbb016701d5de774a4251e41ArtifactHashFF72F8EE": Object {
+      "Description": "Artifact hash for asset \\"e90f48fafdc3969b9a692328ccfa04c0481285c1dbb016701d5de774a4251e41\\"",
+      "Type": "String",
+    },
+    "AssetParameterse90f48fafdc3969b9a692328ccfa04c0481285c1dbb016701d5de774a4251e41S3BucketF472DA21": Object {
+      "Description": "S3 bucket for asset \\"e90f48fafdc3969b9a692328ccfa04c0481285c1dbb016701d5de774a4251e41\\"",
+      "Type": "String",
+    },
+    "AssetParameterse90f48fafdc3969b9a692328ccfa04c0481285c1dbb016701d5de774a4251e41S3VersionKey5FB938DE": Object {
+      "Description": "S3 key for asset version \\"e90f48fafdc3969b9a692328ccfa04c0481285c1dbb016701d5de774a4251e41\\"",
       "Type": "String",
     },
   },
@@ -578,7 +578,7 @@ Object {
       "Properties": Object {
         "Code": Object {
           "S3Bucket": Object {
-            "Ref": "AssetParameters2edbf9313c7b2f979355a21f487ea1e7a9086cbb37b053357be8b257cc160164S3Bucket24EDC087",
+            "Ref": "AssetParameterse90f48fafdc3969b9a692328ccfa04c0481285c1dbb016701d5de774a4251e41S3BucketF472DA21",
           },
           "S3Key": Object {
             "Fn::Join": Array [
@@ -591,7 +591,7 @@ Object {
                       "Fn::Split": Array [
                         "||",
                         Object {
-                          "Ref": "AssetParameters2edbf9313c7b2f979355a21f487ea1e7a9086cbb37b053357be8b257cc160164S3VersionKey17A0EB47",
+                          "Ref": "AssetParameterse90f48fafdc3969b9a692328ccfa04c0481285c1dbb016701d5de774a4251e41S3VersionKey5FB938DE",
                         },
                       ],
                     },
@@ -604,7 +604,7 @@ Object {
                       "Fn::Split": Array [
                         "||",
                         Object {
-                          "Ref": "AssetParameters2edbf9313c7b2f979355a21f487ea1e7a9086cbb37b053357be8b257cc160164S3VersionKey17A0EB47",
+                          "Ref": "AssetParameterse90f48fafdc3969b9a692328ccfa04c0481285c1dbb016701d5de774a4251e41S3VersionKey5FB938DE",
                         },
                       ],
                     },
