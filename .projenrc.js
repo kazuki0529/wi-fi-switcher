@@ -41,7 +41,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
       experimentalDecorators: true,
       emitDecoratorMetadata: true,
       moduleResolution: 'node',
-      target: 'ES2018',
       sourceMap: true
     }
   }
