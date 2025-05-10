@@ -1,5 +1,5 @@
-import '@aws-cdk/assert/jest';
-import { App } from '@aws-cdk/core';
+import { Template } from 'aws-cdk-lib/assertions';
+import { App } from 'aws-cdk-lib';
 import { WiFiSwitcherApiStack } from '../src/wi-fi-switcher-api-stack';
 import { WiFiSwitcherCognitoStack } from '../src/wi-fi-switcher-cognito-stack';
 
@@ -18,11 +18,11 @@ test('Snapshot', () => {
     userPoolClient: cognito.userPoolClient,
   });
 
-  expect(stack).toHaveResource('AWS::DynamoDB::Table');
-
-  expect(stack).toHaveResource('AWS::ApiGatewayV2::Api');
-  expect(stack).toHaveResource('AWS::ApiGatewayV2::Authorizer');
-  expect(stack).toHaveResource('AWS::Lambda::Function');
+  const template = Template.fromStack(stack);
+  template.hasResourceProperties('AWS::DynamoDB::Table', {});
+  template.hasResourceProperties('AWS::ApiGatewayV2::Api', {});
+  template.hasResourceProperties('AWS::ApiGatewayV2::Authorizer', {});
+  template.hasResourceProperties('AWS::Lambda::Function', {});
 
   expect(app.synth().getStackArtifact(stack.artifactId).template).toMatchSnapshot();
 });

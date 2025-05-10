@@ -1,20 +1,20 @@
-import * as codebuild from '@aws-cdk/aws-codebuild';
-import * as codecommit from '@aws-cdk/aws-codecommit';
-import * as codepipeline from '@aws-cdk/aws-codepipeline';
-import { CodeCommitSourceAction } from '@aws-cdk/aws-codepipeline-actions';
-import * as iam from '@aws-cdk/aws-iam';
+import * as codebuild from 'aws-cdk-lib/aws-codebuild';
+import * as codecommit from 'aws-cdk-lib/aws-codecommit';
+import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
+import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import {
   CfnOutput,
-  Construct,
   Stage,
   Stack,
   StackProps,
-} from '@aws-cdk/core';
+} from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import {
-  CdkPipeline,
-  SimpleSynthAction,
-  ShellScriptAction,
-} from '@aws-cdk/pipelines';
+  CodePipeline,
+  CodePipelineSource,
+  ShellStep,
+} from 'aws-cdk-lib/pipelines';
 import {
   WiFiSwitcherApiStack,
 } from './wi-fi-switcher-api-stack';
@@ -95,117 +95,104 @@ export class WiFiSwitcherPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const sourceArtifact = new codepipeline.Artifact();
-    const cloudAssemblyArtifact = new codepipeline.Artifact();
-
     const repo = codecommit.Repository.fromRepositoryName(
       this,
       'repo',
       'wi-fi-switcher',
     ) as codecommit.Repository;
-    const sourceAction = new CodeCommitSourceAction ({
-      actionName: 'CodeCommit',
-      repository: repo,
-      branch: 'main',
-      output: sourceArtifact,
-    });
-    const synthProps = {
-      sourceArtifact,
-      cloudAssemblyArtifact,
-      environment: {
-        privileged: true,
-        environmentVariables: {
-          CERT_ARN: {
-            value: this.node.tryGetContext('CERT_ARN') ?? '',
-          },
-          ZONE_ID: {
-            value: this.node.tryGetContext('ZONE_ID') ?? '',
-          },
-          ZONE_NAME: {
-            value: this.node.tryGetContext('ZONE_NAME') ?? '',
-          },
-        },
-      },
-      synthCommand: 'npx cdk synth -c "CERT_ARN=${CERT_ARN}" -c "ZONE_ID=${ZONE_ID}" -c "ZONE_NAME=${ZONE_NAME}"',
-    };
 
-    const pipeline = new CdkPipeline(this, 'pipeline', {
+    const pipeline = new CodePipeline(this, 'pipeline', {
       pipelineName: 'Wi-Fi-SwitcherPipeline',
-      cloudAssemblyArtifact,
-      sourceAction,
-      synthAction: SimpleSynthAction.standardYarnSynth({
-        ...synthProps,
-        synthCommand: 'npx cdk synth -c "CERT_ARN=${CERT_ARN}" -c "ZONE_ID=${ZONE_ID}" -c "ZONE_NAME=${ZONE_NAME}"',
+      synth: new ShellStep('Synth', {
+        input: CodePipelineSource.codeCommit(repo, 'main'),
+        env: {
+          CERT_ARN: this.node.tryGetContext('CERT_ARN') ?? '',
+          ZONE_ID: this.node.tryGetContext('ZONE_ID') ?? '',
+          ZONE_NAME: this.node.tryGetContext('ZONE_NAME') ?? '',
+        },
+        commands: [
+          'npm ci',
+          'npx cdk synth -c "CERT_ARN=${CERT_ARN}" -c "ZONE_ID=${ZONE_ID}" -c "ZONE_NAME=${ZONE_NAME}"',
+        ],
       }),
     });
 
+    // Create deployment steps for web assets
+    const deployWebCommands = [
+      'npm install -g yarn aws-cli',
+      '(cd ./web && yarn install --frozen-lockfile && yarn build)',
+      '(cd ./web/build && aws s3 sync . "s3://${WEB_BUCKET_NAME}/" --include "*" --delete)',
+      'aws cloudfront create-invalidation --distribution-id "${DISTRIBUTION_ID}" --paths "/*"',
+    ];
+
     // 開発用のDeploy
-    const deployProps = {
-      actionName: 'deployment-web',
-      environment: {
-        privileged: true,
-        buildImage: codebuild.LinuxBuildImage.STANDARD_5_0,
-      },
-      commands: [
-        'npm install -g yarn aws-cli',
-        '(cd ./web && yarn install --frozen-lockfile && yarn build)',
-        '(cd ./web/build && aws s3 sync . "s3://${WEB_BUCKET_NAME}/" --include "*" --delete)',
-        'aws cloudfront create-invalidation --distribution-id "${DISTRIBUTION_ID}" --paths "/*"',
-      ],
-      additionalArtifacts: [sourceArtifact],
-      rolePolicyStatements: [
-        new iam.PolicyStatement({
-          actions: [
-            's3:ListAllMyBuckets',
-            's3:ListBucket',
-            's3:ListObjectsV2',
-            's3:PutObject',
-            's3:DeleteObject',
-            's3:GetObject',
-          ],
-          resources: ['arn:aws:s3:::*'],
-        }),
-        new iam.PolicyStatement({
-          actions: [
-            'cloudfront:GetDistribution',
-            'cloudfront:GetDistributionConfig',
-            'cloudfront:ListDistributions',
-            'cloudfront:ListStreamingDistributions',
-            'cloudfront:CreateInvalidation',
-            'cloudfront:ListInvalidations',
-            'cloudfront:GetInvalidation',
-          ],
-          resources: ['*'],
-        }),
-      ],
-    };
     const stageApp = new Application(this, 'staging', { stage: 'staging' });
-    const stage = pipeline.addApplicationStage(stageApp);
-    stage.addActions(new ShellScriptAction({
-      ...deployProps,
-      useOutputs: {
-        DISTRIBUTION_ID: pipeline.stackOutput(stageApp.distributionId),
-        WEB_BUCKET_NAME: pipeline.stackOutput(stageApp.webBucketName),
-        REACT_APP_API_URL: pipeline.stackOutput(stageApp.apiUrl),
-        REACT_APP_AWS_COGNITO_REGION: pipeline.stackOutput(stageApp.userPoolRegion),
-        REACT_APP_AWS_USER_POOLS_ID: pipeline.stackOutput(stageApp.userPoolId),
-        REACT_APP_AWS_USER_POOLS_CLIENT_ID: pipeline.stackOutput(stageApp.userPoolClientId),
+    const stageDeployment = pipeline.addStage(stageApp);
+    
+    stageDeployment.addPost(new ShellStep('DeployWebAssets', {
+      envFromCfnOutputs: {
+        DISTRIBUTION_ID: stageApp.distributionId,
+        WEB_BUCKET_NAME: stageApp.webBucketName,
+        REACT_APP_API_URL: stageApp.apiUrl,
+        REACT_APP_AWS_COGNITO_REGION: stageApp.userPoolRegion,
+        REACT_APP_AWS_USER_POOLS_ID: stageApp.userPoolId,
+        REACT_APP_AWS_USER_POOLS_CLIENT_ID: stageApp.userPoolClientId,
       },
+      commands: deployWebCommands,
     }));
 
     // 本番用のDeploy
     const prodApp = new Application(this, 'prod', { stage: 'prod' });
-    const prod = pipeline.addApplicationStage(prodApp, { manualApprovals: true });
-    prod.addActions( new ShellScriptAction({
-      ...deployProps,
-      useOutputs: {
-        DISTRIBUTION_ID: pipeline.stackOutput(prodApp.distributionId),
-        WEB_BUCKET_NAME: pipeline.stackOutput(prodApp.webBucketName),
-        REACT_APP_API_URL: pipeline.stackOutput(prodApp.apiUrl),
-        REACT_APP_AWS_COGNITO_REGION: pipeline.stackOutput(prodApp.userPoolRegion),
-        REACT_APP_AWS_USER_POOLS_ID: pipeline.stackOutput(prodApp.userPoolId),
-        REACT_APP_AWS_USER_POOLS_CLIENT_ID: pipeline.stackOutput(prodApp.userPoolClientId),
+    const prodDeployment = pipeline.addStage(prodApp, {
+      pre: [
+        new ShellStep('Approval', {
+          commands: ['echo "Deployment to production approved"'],
+        }),
+      ],
+    });
+    
+    prodDeployment.addPost(new ShellStep('DeployWebAssets', {
+      envFromCfnOutputs: {
+        DISTRIBUTION_ID: prodApp.distributionId,
+        WEB_BUCKET_NAME: prodApp.webBucketName,
+        REACT_APP_API_URL: prodApp.apiUrl,
+        REACT_APP_AWS_COGNITO_REGION: prodApp.userPoolRegion,
+        REACT_APP_AWS_USER_POOLS_ID: prodApp.userPoolId,
+        REACT_APP_AWS_USER_POOLS_CLIENT_ID: prodApp.userPoolClientId,
       },
+      commands: deployWebCommands,
     }));
+
+    // Add permissions for S3 and CloudFront
+    const policyStatement = new iam.PolicyStatement({
+      actions: [
+        's3:ListAllMyBuckets',
+        's3:ListBucket',
+        's3:ListObjectsV2',
+        's3:PutObject',
+        's3:DeleteObject',
+        's3:GetObject',
+      ],
+      resources: ['arn:aws:s3:::*'],
+    });
+
+    const cloudfrontPolicyStatement = new iam.PolicyStatement({
+      actions: [
+        'cloudfront:GetDistribution',
+        'cloudfront:GetDistributionConfig',
+        'cloudfront:ListDistributions',
+        'cloudfront:ListStreamingDistributions',
+        'cloudfront:CreateInvalidation',
+        'cloudfront:ListInvalidations',
+        'cloudfront:GetInvalidation',
+      ],
+      resources: ['*'],
+    });
+
+    // Add these policies to the pipeline role
+    pipeline.buildPipeline();
+    const pipelineRole = pipeline.pipeline.role;
+    pipelineRole.addToPrincipalPolicy(policyStatement);
+    pipelineRole.addToPrincipalPolicy(cloudfrontPolicyStatement);
   }
 }

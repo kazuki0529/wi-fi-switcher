@@ -1,4 +1,50 @@
-const { GitHubTrigger } = require('@aws-cdk/aws-codepipeline-actions');
+const { awscdk } = require('projen');
+const project = new awscdk.AwsCdkTypeScriptApp({
+  cdkVersion: '2.80.0',
+  defaultReleaseBranch: 'main',
+  name: 'wi-fi-switcher',
+  deps: [
+    'aws-cdk-lib',
+    'constructs@^10.0.0',
+    '@aws-sdk/client-dynamodb',
+    '@aws-sdk/lib-dynamodb',
+    'aws-xray-sdk',
+    'moment',
+    'type-guards',
+    'uuid',
+    '@types/uuid',
+    '@types/aws-lambda',
+  ],
+  devDeps: [
+    '@types/node@^14',
+    '@typescript-eslint/eslint-plugin@^5',
+    '@typescript-eslint/parser@^5',
+    'aws-sdk-client-mock@^1.0.0',
+    'esbuild@^0.17.3',
+    'eslint@^8',
+    'eslint-import-resolver-node@^0.3.7',
+    'eslint-import-resolver-typescript@^2.7.1',
+    'eslint-plugin-import@^2.27.5',
+  ],
+  tsconfig: {
+    compilerOptions: {
+      target: 'ES2018',
+      module: 'commonjs',
+      lib: ['es2018'],
+      declaration: true,
+      strict: true,
+      noUnusedLocals: true,
+      noUnusedParameters: true,
+      noImplicitReturns: true,
+      noFallthroughCasesInSwitch: true,
+      esModuleInterop: true,
+      experimentalDecorators: true,
+      emitDecoratorMetadata: true,
+      moduleResolution: 'node',
+      sourceMap: true
+    }
+  }
+});
 const { awscdk, web, github } = require('projen');
 
 const project = new awscdk.AwsCdkTypeScriptApp({

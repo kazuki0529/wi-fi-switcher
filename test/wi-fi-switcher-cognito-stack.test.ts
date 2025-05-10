@@ -1,5 +1,5 @@
-import '@aws-cdk/assert/jest';
-import { App } from '@aws-cdk/core';
+import { Template } from 'aws-cdk-lib/assertions';
+import { App } from 'aws-cdk-lib';
 import { WiFiSwitcherCognitoStack } from '../src/wi-fi-switcher-cognito-stack';
 
 test('Snapshot', () => {
@@ -13,8 +13,9 @@ test('Snapshot', () => {
   });
   const stack = new WiFiSwitcherCognitoStack(app, 'test', { stage: 'staging' });
 
-  expect(stack).toHaveResource('AWS::Cognito::UserPool');
-  expect(stack).toHaveResource('AWS::Cognito::UserPoolClient');
+  const template = Template.fromStack(stack);
+  template.hasResourceProperties('AWS::Cognito::UserPool', {});
+  template.hasResourceProperties('AWS::Cognito::UserPoolClient', {});
 
   expect(app.synth().getStackArtifact(stack.artifactId).template).toMatchSnapshot();
 });

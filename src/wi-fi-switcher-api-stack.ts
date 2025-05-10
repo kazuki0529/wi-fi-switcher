@@ -1,14 +1,14 @@
-import * as apigw from '@aws-cdk/aws-apigatewayv2';
-import * as authz from '@aws-cdk/aws-apigatewayv2-authorizers';
-import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations';
-import * as cognito from '@aws-cdk/aws-cognito';
-import * as dynamo from '@aws-cdk/aws-dynamodb';
-import * as iam from '@aws-cdk/aws-iam';;
-import * as lambda from '@aws-cdk/aws-lambda';
-import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
-import * as logs from '@aws-cdk/aws-logs';
-import * as cdk from '@aws-cdk/core';
-import { Construct, RemovalPolicy, Stack, StackProps } from '@aws-cdk/core';
+import * as apigw from 'aws-cdk-lib/aws-apigatewayv2';
+import * as authz from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
+import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
+import * as dynamo from 'aws-cdk-lib/aws-dynamodb';
+import * as iam from 'aws-cdk-lib/aws-iam';;
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import * as logs from 'aws-cdk-lib/aws-logs';
+import { Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { StackStage } from './wi-fi-switcher-stack';
 
 
@@ -64,7 +64,7 @@ export class WiFiSwitcherApiStack extends Stack {
     const requests = new NodejsFunction(this, 'requests', {
       tracing: lambda.Tracing.ACTIVE,
       runtime: lambda.Runtime.NODEJS_14_X,
-      timeout: cdk.Duration.seconds(60),
+      timeout: Duration.seconds(60),
       memorySize: 2048,
       environment: {
         REGION: this.region,
