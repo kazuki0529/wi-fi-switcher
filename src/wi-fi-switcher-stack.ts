@@ -1,13 +1,13 @@
-import * as apigateway from '@aws-cdk/aws-apigatewayv2';
-import * as certificate from '@aws-cdk/aws-certificatemanager';
-import * as cloudfront from '@aws-cdk/aws-cloudfront';
-import * as dynamo from '@aws-cdk/aws-dynamodb';
-import * as iam from '@aws-cdk/aws-iam';
-import { ARecord, PublicHostedZone, RecordTarget } from '@aws-cdk/aws-route53';
-import { CloudFrontTarget } from '@aws-cdk/aws-route53-targets';
-import * as s3 from '@aws-cdk/aws-s3';
-import * as cdk from '@aws-cdk/core';
-import { Construct, Stack, StackProps } from '@aws-cdk/core';
+import * as apigateway from 'aws-cdk-lib/aws-apigatewayv2';
+import * as certificate from 'aws-cdk-lib/aws-certificatemanager';
+import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import * as dynamo from 'aws-cdk-lib/aws-dynamodb';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import { ARecord, PublicHostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import { CfnOutput, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 
 export type StackStage = 'staging' | 'prod';
@@ -118,10 +118,10 @@ export class WiFiSwitcherStack extends Stack {
     props.table.grantReadData(switcher);
 
     // CloudFrontのアクセスURLを出力
-    new cdk.CfnOutput(this, 'UiCloudFrontUrl', {
+    new CfnOutput(this, 'UiCloudFrontUrl', {
       value: `https://${this.distribution.distributionDomainName}/`,
     });
-    new cdk.CfnOutput(this, 'UiAccessUrl', {
+    new CfnOutput(this, 'UiAccessUrl', {
       value: `https://${fqdn}/`,
     });
   }

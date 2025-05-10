@@ -1,5 +1,5 @@
-import '@aws-cdk/assert/jest';
-import { App } from '@aws-cdk/core';
+import { Template } from 'aws-cdk-lib/assertions';
+import { App } from 'aws-cdk-lib';
 import { WiFiSwitcherApiStack } from '../src/wi-fi-switcher-api-stack';
 import { WiFiSwitcherCognitoStack } from '../src/wi-fi-switcher-cognito-stack';
 import { WiFiSwitcherStack } from '../src/wi-fi-switcher-stack';
@@ -24,10 +24,11 @@ test('Snapshot', () => {
     table: api.table,
   });
 
-  expect(stack).toHaveResource('AWS::CloudFront::Distribution');
-  expect(stack).toHaveResource('AWS::CloudFront::CloudFrontOriginAccessIdentity');
-  expect(stack).toHaveResource('AWS::S3::Bucket');
-  expect(stack).toHaveResource('AWS::IAM::User');
+  const template = Template.fromStack(stack);
+  template.hasResourceProperties('AWS::CloudFront::Distribution', {});
+  template.hasResourceProperties('AWS::CloudFront::CloudFrontOriginAccessIdentity', {});
+  template.hasResourceProperties('AWS::S3::Bucket', {});
+  template.hasResourceProperties('AWS::IAM::User', {});
 
   expect(app.synth().getStackArtifact(stack.artifactId).template).toMatchSnapshot();
 });

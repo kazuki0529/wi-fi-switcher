@@ -1,7 +1,6 @@
-import * as cognito from '@aws-cdk/aws-cognito';
-import * as cdk from '@aws-cdk/core';
-
-import { Construct, Stack, StackProps } from '@aws-cdk/core';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
+import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { StackStage } from './wi-fi-switcher-stack';
 
 interface WiFiSwitcherCognitoStackProps extends StackProps {
@@ -32,7 +31,7 @@ export class WiFiSwitcherCognitoStack extends Stack {
       autoVerify: { email: true },
       signInAliases: { username: true },
       accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
     this.userPool.addDomain('domain', {
       cognitoDomain: { domainPrefix: fqdn.toLowerCase().split('.').join('-') },
